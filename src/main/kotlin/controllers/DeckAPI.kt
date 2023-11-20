@@ -1,11 +1,13 @@
 package controllers
 
 import models.Deck
+import persistence.Serializer
 import utils.Utilities.formatListString
 import java.util.ArrayList
 
-class DeckAPI() {
+class DeckAPI(serializerType: Serializer) {
 
+    private var serializer: Serializer = serializerType
     private var decks = ArrayList<Deck>()
 
 
@@ -124,4 +126,21 @@ class DeckAPI() {
         return numberOfToDoItems
     }*/
 
+    // ----------------------------------------------
+    //  PERSISTENCE
+    // ----------------------------------------------
+
+    /**
+     * Loads the notes from the serializer.
+     */
+    fun load(){
+        decks = serializer.read() as ArrayList<Deck>
+    }
+
+    /**
+     * Stores the notes using the serializer.
+     */
+    fun store(){
+        serializer.write(decks)
+    }
 }

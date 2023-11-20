@@ -1,12 +1,15 @@
 import controllers.DeckAPI
 import models.Deck
 import models.Flashcard
+import persistence.YAMLSerializer
 import utils.ScannerInput.readNextChar
 import utils.ScannerInput.readNextInt
 import utils.ScannerInput.readNextLine
+import java.io.File
 import kotlin.system.exitProcess
 
-private val deckAPI = DeckAPI()
+private val deckAPI = DeckAPI(YAMLSerializer(File("decks.yaml")))
+
 
 fun main() = runMenu()
 
@@ -17,10 +20,12 @@ fun runMenu() {
             2 -> listDecks()
             3 -> updateDeck()
             4 -> deleteDeck()
-            6 -> addFlashcardToDeck()
-            7 -> updateFlashcardInDeck()
-            8 -> deleteFlashcard()
-            10 -> searchDecks()
+            5 -> addFlashcardToDeck()
+            6 -> updateFlashcardInDeck()
+            7 -> deleteFlashcard()
+            8 -> searchDecks()
+            20-> save()
+            21-> load()
             0 -> exitApp()
             else -> println("Invalid menu choice: $option")
         }
@@ -55,7 +60,9 @@ fun mainMenu() = readNextInt(
          > |   17) .....                                       |
          > |   18) .....                                       |
          > |   19) .....                                       |
-         > -----------------------------------------------------  
+         > ----------------------------------------------------- 
+         > |   20) Save decks                                   
+         > |   21) Load decks                                  |
          > |   0) Exit                                         |
          > -----------------------------------------------------  
          > ==>> """.trimMargin(">")
@@ -279,5 +286,31 @@ private fun askUserToChooseFlashcard(deck: Deck): Flashcard? {
     else{
         println ("No items for chosen note")
         return null
+    }
+}
+
+//------------------------------------
+//PERSISTENCE FUNCTIONS
+//------------------------------------
+
+/**
+ * Saves the notes to a file in the Note Keeper App.
+ */
+fun save(){
+    try{
+        deckAPI.store()
+    } catch (e: Exception){
+        System.err.println("Error writing to file: $e")
+    }
+}
+
+/**
+ * Loads the notes from a file into the Note Keeper App.
+ */
+fun load(){
+    try {
+        deckAPI.load()
+    } catch (e: Exception){
+        System.err.println("Error reading from file: $e")
     }
 }
