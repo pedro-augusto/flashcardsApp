@@ -48,7 +48,7 @@ class DeckAPI(serializerType: Serializer) {
     //  LISTING METHODS FOR DECK ArrayList
     // ----------------------------------------------
     fun listAllDecks() =
-        if (decks.isEmpty()) "No notes stored"
+        if (decks.isEmpty()) "No decks stored"
         else formatListString(decks)
 
     fun listDecksWithFlashcards() =
@@ -131,14 +131,14 @@ class DeckAPI(serializerType: Serializer) {
     // ----------------------------------------------
 
     /**
-     * Loads the notes from the serializer.
+     * Loads decks from the serializer.
      */
     fun load(){
         decks = serializer.read() as ArrayList<Deck>
     }
 
     /**
-     * Stores the notes using the serializer.
+     * Stores decks using the serializer.
      */
     fun store(){
         serializer.write(decks)
