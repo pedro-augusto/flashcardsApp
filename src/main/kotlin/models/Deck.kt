@@ -1,7 +1,11 @@
 package models
 
 import utils.Utilities
+import utils.Utilities.resetColour
+import utils.Utilities.yellowColour
 import java.time.LocalDate
+import java.time.format.DateTimeFormatter
+import java.time.format.FormatStyle
 
 data class Deck(
     var deckId: Int = 0,
@@ -52,5 +56,25 @@ data class Deck(
          if (flashcards.isEmpty())  "\tNO FLASHCARDS ADDED"
          else  Utilities.formatSetString(flashcards)
 
+    fun calculateHitsPercentage(): String {
+        val hitsNumber = flashcards.filter{ flashcard -> flashcard.hit == "Hit" }.size.toDouble()
+        val percentage: Double = (hitsNumber/flashcards.size.toDouble())*100
+        return "$percentage%"
+
+    }
+
+    override fun toString(): String {
+
+
+        val lastDateAccessedString = if(lastDateAccessed!=null) "| LAST ACCESS: ${lastDateAccessed?.format(
+            DateTimeFormatter.ofLocalizedDate(FormatStyle.SHORT))}" else ""
+
+        val result =
+            """            $yellowColour-----------------------------------------------------------------------------------------------------------
+            | ID: $deckId     | TITLE: $title     | THEME: $theme     | LEVEL: $level     $lastDateAccessedString 
+            -----------------------------------------------------------------------------------------------------------$resetColour""".trimIndent()
+
+        return result
+    }
 
 }

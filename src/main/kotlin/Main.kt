@@ -4,6 +4,10 @@ import models.Flashcard
 import persistence.YAMLSerializer
 import utils.ScannerInput.readNextInt
 import utils.ScannerInput.readNextLine
+import utils.Utilities.greenColour
+import utils.Utilities.redColour
+import utils.Utilities.resetColour
+import utils.Utilities.yellowColour
 import java.io.File
 import java.time.LocalDate
 import java.util.concurrent.TimeUnit
@@ -19,7 +23,7 @@ fun runMenu() {
     do {
         when (val option = mainMenu()) {
             1 -> addDeck()
-            2 -> listDecks()
+            2 -> listDecks("all")
             3 -> updateDeck()
             4 -> deleteDeck()
             5-> searchDecks()
@@ -72,52 +76,106 @@ fun mainMenu() = readNextInt(
          > ==>> """.trimMargin(">")
     )
 //------------------------------------
-//PLAY MENU
+//PLAY RELATED
 //------------------------------------
 
 fun play(){
     var guessedCorrectly: Int
+    var chosenDeck: Deck?
 
-    val chosenDeck = askUserToChooseDeck()
-    if(chosenDeck!= null){
-        chosenDeck!!.flashcards.forEach{ flashcard ->
-            if(Random.nextBoolean()){
-                println("${flashcard.flashcardId}) ${flashcard.word} (${flashcard.typeOfWord})")
-                TimeUnit.SECONDS.sleep(10)
-                println(flashcard.meaning)
-            } else {
-                println("${flashcard.flashcardId}) ${flashcard.meaning} (${flashcard.typeOfWord})")
-                TimeUnit.SECONDS.sleep(10)
-                println(flashcard.word)
-            }
 
-            guessedCorrectly = readNextInt("Did you guess it correctly? (1- YES, Any Other Number- NO): ")
-            if(guessedCorrectly==1) flashcard.hit = "Hit"
-            else flashcard.hit = "Missed"
-
-            flashcard.attempts++
+    if(deckAPI.numberOfDecksWithFlashcards()>0) {
+        do {
+            println("Please select a deck:")
+            chosenDeck = askUserToChooseDeck("alternate")
         }
+        while(chosenDeck!!.flashcards.isEmpty())
 
-        chosenDeck.lastDateAccessed = LocalDate.now()
+        println("")
+        println("Instructions: Either the WORD side of the card will be shown and you have to try to remember its meaning or the MEANING side of the word will be shown and you have to remember the respective WORD.")
+        println("The system will ask you if you guessed it correctly or not. There is no need to input anything unless asked.")
 
+        if (chosenDeck != null) {
+            chosenDeck!!.flashcards.forEach { flashcard ->
 
-        var markAsFavourite = readNextInt("Would you like to mark one or more words as favourite? (1- YES, Any Other Number- NO): ")
-        var continueMarking: Int
-        var favouriteId: Int
-        if(markAsFavourite==1){
-            do{
-                favouriteId = readNextInt("Enter the id of the flashcard you want to mark as favourite: ")
-                if(!chosenDeck.findFlashcard(favouriteId)!!.favourite){
-                    chosenDeck.findFlashcard(favouriteId)!!.favourite = true
-                    print("Flashcard successfully marked as favourite.")
+                println("")
+
+                if (Random.nextBoolean()) {
+                    printFlashcardPlayMode("meaning",flashcard, false)
+                    TimeUnit.SECONDS.sleep(5)
+                    printFlashcardPlayMode("meaning",flashcard, true)
                 } else {
-                    println("This flashcard is already marked as favourite.")
+                    printFlashcardPlayMode("word",flashcard, false)
+                    TimeUnit.SECONDS.sleep(5)
+                    printFlashcardPlayMode("word",flashcard, true)
                 }
 
-                continueMarking = readNextInt("Would you like to continue marking flashcards as favourites? (1- YES, Any Other Number- NO): ")
-            } while(continueMarking==1)
+                guessedCorrectly = readNextInt("Did you guess it correctly? (1- YES, Any Other Number- NO): ")
+                if (guessedCorrectly == 1) flashcard.hit = "Hit"
+                else flashcard.hit = "Missed"
+
+                flashcard.attempts++
+            }
+            chosenDeck.lastDateAccessed = LocalDate.now()
+
+            println("")
+            println("Your percentage of hits is: $greenColour ${chosenDeck.calculateHitsPercentage()} $resetColour")
+
+
+            var markAsFavourite =
+                readNextInt("Would you like to mark one or more words as favourite? (1- YES | Any Other Number- NO): ")
+
+            if (markAsFavourite == 1) {
+                var continueMarking: Int
+                var favouriteId: Int
+
+                do {
+                    favouriteId = readNextInt("Enter the id of the flashcard you want to mark as favourite: ")
+                    if (chosenDeck.findFlashcard(favouriteId)!=null && !chosenDeck.findFlashcard(favouriteId)!!.favourite) {
+                        chosenDeck.findFlashcard(favouriteId)!!.favourite = true
+                        println("Flashcard successfully marked as favourite.")
+                    } else {
+                        println("This flashcard is either already marked as favourite or it doesn't exist in this deck.")
+                    }
+
+                    continueMarking =
+                        readNextInt("Would you like to continue marking flashcards as favourites? (1- YES | Any Other Number- NO): ")
+                } while (continueMarking == 1)
+            }
+        }
+    } else {
+        println("There are no decks with flashcards in the system yet. Create decks or populate an existing empty one with flashcards to start playing.")
+    }
+}
+
+fun printFlashcardPlayMode(guess: String, flashcard: Flashcard, result:Boolean){
+    var word: String
+    var meaning: String
+
+    if(guess=="meaning"){ // user has to guess meaning
+        word = flashcard.word // word is visible
+        meaning = "$redColour???$yellowColour" // meaning is not visible
+        if(result){ // if result is to be displayed
+            meaning = "$greenColour${flashcard.meaning}$yellowColour" // meaning is visible and green
+        }
+    } else { // user has to guess word
+        meaning = flashcard.meaning // meaning visible
+        word = "$redColour???$yellowColour" // word not visible
+        if(result){ // if result is to be displayed
+            word = "$greenColour${flashcard.word}$yellowColour" // word is visible and green
         }
     }
+
+    println("""
+        $yellowColour-----------------------------------
+        | ID: ${flashcard.flashcardId}  | 
+        |---------
+        |   WORD: $word                    
+        |   TYPE: (${flashcard.typeOfWord})
+        |----------------------------------
+        |   MEANING: $meaning
+        -----------------------------------$resetColour
+    """.trimIndent())
 }
 
 //------------------------------------
@@ -162,23 +220,39 @@ fun chooseLevel(): String {
     return deckLevel
 }
 
-fun listDecks() {
+fun listDecks(page:String) {
     if (deckAPI.numberOfDecks() > 0) {
-        val option = readNextInt(
-            """
-                  > --------------------------------------
-                  > |   1) View ALL decks                |
-                  > |   2) View DECKS WITH FLASHCARDS    |
-                  > |   3) View EMPTY decks              |
-                  > --------------------------------------
-         > ==>> """.trimMargin(">")
-        )
+        if(page!="alternate") {
+            val option = readNextInt(
+                """
+                      > --------------------------------------
+                      > |   1) View ALL decks                |
+                      > |   2) View DECKS WITH FLASHCARDS    |
+                      > |   3) View EMPTY decks              |
+                      > --------------------------------------
+             > ==>> """.trimMargin(">")
+            )
 
-        when (option) {
-            1 -> listAllDecks()
-            2 -> listDecksWithFlashcards()
-            3 -> listEmptyDecks()
-            else -> println("Invalid option entered: $option")
+            when (option) {
+                1 -> listAllDecks()
+                2 -> listDecksWithFlashcards()
+                3 -> listEmptyDecks()
+                else -> println("Invalid option entered: $option")
+            }
+        } else {
+            val option = readNextInt(
+                """
+                      > --------------------------------------
+                      > |   1) View DECKS WITH FLASHCARDS    |
+                      > |   2)                               |
+                      > --------------------------------------
+             > ==>> """.trimMargin(">")
+            )
+
+            when (option) {
+                1 -> listDecksWithFlashcards()
+                else -> println("Invalid option entered: $option")
+            }
         }
     } else {
         println("Option Invalid - No decks stored")
@@ -190,7 +264,7 @@ fun listDecksWithFlashcards() = println(deckAPI.listDecksWithFlashcards())
 fun listEmptyDecks() = println(deckAPI.listEmptyDecks())
 
 fun updateDeck() {
-    listDecks()
+    listDecks("all")
     if (deckAPI.numberOfDecks() > 0) {
         // only ask the user to choose the note if notes exist
         val id = readNextInt("Enter the id of the deck to update: ")
@@ -212,7 +286,7 @@ fun updateDeck() {
 }
 
 fun deleteDeck() {
-    listDecks()
+    listDecks("all")
     if (deckAPI.numberOfDecks() > 0) {
         // only ask the user to choose the note to delete if notes exist
         val id = readNextInt("Enter the id of the deck to delete: ")
@@ -248,7 +322,7 @@ fun createFlashcard(): Flashcard{
 }
 
 private fun addFlashcardToDeck() {
-    val deck: Deck? = askUserToChooseDeck()
+    val deck: Deck? = askUserToChooseDeck("all")
     var continueAdding: Int
     if (deck != null) {
         do{
@@ -261,8 +335,8 @@ private fun addFlashcardToDeck() {
 }
 
 fun updateFlashcardsInDeck() {
-    val deck: Deck? = askUserToChooseDeck()
-    if (deck != null) {
+    val deck: Deck? = askUserToChooseDeck("alternate")
+    if (deck != null && deck.flashcards.isNotEmpty()) {
         val flashcard: Flashcard? = askUserToChooseFlashcard(deck)
         if (flashcard != null) {
             if (deck.updateFlashcard(flashcard.flashcardId, createFlashcard())) {
@@ -275,7 +349,7 @@ fun updateFlashcardsInDeck() {
 }
 
 fun deleteFlashcard() {
-    val deck: Deck? = askUserToChooseDeck()
+    val deck: Deck? = askUserToChooseDeck("alternate")
     if (deck != null) {
         val flashcard: Flashcard? = askUserToChooseFlashcard(deck)
         if (flashcard != null) {
@@ -312,8 +386,8 @@ fun searchDecks() {
 //HELPER FUNCTIONS
 //------------------------------------
 
-private fun askUserToChooseDeck(): Deck? {
-    listDecks()
+private fun askUserToChooseDeck(page: String): Deck? {
+    listDecks(page)
     if (deckAPI.numberOfDecks() > 0) {
         val deck = deckAPI.findDeck(readNextInt("\nEnter the id of the deck: "))
         if (deck != null) {
