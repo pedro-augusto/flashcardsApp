@@ -2,11 +2,13 @@ import controllers.DeckAPI
 import models.Deck
 import models.Flashcard
 import persistence.YAMLSerializer
-import utils.ScannerInput.readNextChar
 import utils.ScannerInput.readNextInt
 import utils.ScannerInput.readNextLine
 import java.io.File
+import java.time.LocalDate
+import java.util.concurrent.TimeUnit
 import kotlin.system.exitProcess
+import kotlin.random.Random
 
 private val deckAPI = DeckAPI(YAMLSerializer(File("decks.yaml")))
 
@@ -20,10 +22,11 @@ fun runMenu() {
             2 -> listDecks()
             3 -> updateDeck()
             4 -> deleteDeck()
-            5 -> addFlashcardToDeck()
-            6 -> updateFlashcardInDeck()
-            7 -> deleteFlashcard()
-            8 -> searchDecks()
+            5-> searchDecks()
+            6 -> addFlashcardToDeck()
+            7 -> updateFlashcardsInDeck()
+            8 -> deleteFlashcard()
+            9 -> play()
             20-> save()
             21-> load()
             0 -> exitApp()
@@ -42,13 +45,14 @@ fun mainMenu() = readNextInt(
          > |   2) List decks                                   |
          > |   3) Update a deck                                |
          > |   4) Delete a deck                                |
+         > |   5) Search Decks by Title                        |
          > -----------------------------------------------------  
          > | FLASHCARDS MENU                                   | 
-         > |   5) Add flashcard to a deck                      |
-         > |   6) Update flashcard in a deck                   |
-         > |   7) Delete flashcard from a deck                 |
+         > |   6) Add flashcards to a deck                     |
+         > |   7) Update flashcard in a deck                   |
+         > |   8) Delete flashcard from a deck                 |
          > ----------------------------------------------------- 
-         > |                8) START PLAYING                   |
+         > |                9) START PLAYING                   |
          > ----------------------------------------------------- 
          > | REPORT MENU FOR DECKS                             | 
          > |   11) .....                                       |
@@ -67,9 +71,57 @@ fun mainMenu() = readNextInt(
          > -----------------------------------------------------  
          > ==>> """.trimMargin(">")
     )
+//------------------------------------
+//PLAY MENU
+//------------------------------------
+
+fun play(){
+    var guessedCorrectly: Int
+
+    val chosenDeck = askUserToChooseDeck()
+    if(chosenDeck!= null){
+        chosenDeck!!.flashcards.forEach{ flashcard ->
+            if(Random.nextBoolean()){
+                println("${flashcard.flashcardId}) ${flashcard.word} (${flashcard.typeOfWord})")
+                TimeUnit.SECONDS.sleep(10)
+                println(flashcard.meaning)
+            } else {
+                println("${flashcard.flashcardId}) ${flashcard.meaning} (${flashcard.typeOfWord})")
+                TimeUnit.SECONDS.sleep(10)
+                println(flashcard.word)
+            }
+
+            guessedCorrectly = readNextInt("Did you guess it correctly? (1- YES, Any Other Number- NO): ")
+            if(guessedCorrectly==1) flashcard.hit = "Hit"
+            else flashcard.hit = "Missed"
+
+            flashcard.attempts++
+        }
+
+        chosenDeck.lastDateAccessed = LocalDate.now()
+
+
+        var markAsFavourite = readNextInt("Would you like to mark one or more words as favourite? (1- YES, Any Other Number- NO): ")
+        var continueMarking: Int
+        var favouriteId: Int
+        if(markAsFavourite==1){
+            do{
+                favouriteId = readNextInt("Enter the id of the flashcard you want to mark as favourite: ")
+                if(!chosenDeck.findFlashcard(favouriteId)!!.favourite){
+                    chosenDeck.findFlashcard(favouriteId)!!.favourite = true
+                    print("Flashcard successfully marked as favourite.")
+                } else {
+                    println("This flashcard is already marked as favourite.")
+                }
+
+                continueMarking = readNextInt("Would you like to continue marking flashcards as favourites? (1- YES, Any Other Number- NO): ")
+            } while(continueMarking==1)
+        }
+    }
+}
 
 //------------------------------------
-//NOTE MENU
+//DECK MENU
 //------------------------------------
 fun addDeck() {
     val deckTitle = readNextLine("Enter a title for the deck: ")
@@ -178,7 +230,6 @@ fun deleteDeck() {
 //FLASHCARD MENU
 //-------------------------------------------
 
-
 fun createFlashcard(): Flashcard{
     val word = readNextLine("Enter the word/expression: ")
     val meaning = readNextLine("Enter its meaning: ")
@@ -198,14 +249,18 @@ fun createFlashcard(): Flashcard{
 
 private fun addFlashcardToDeck() {
     val deck: Deck? = askUserToChooseDeck()
+    var continueAdding: Int
     if (deck != null) {
-        if (deck.addFlashcard(createFlashcard()))
-            println("Add Successful!")
-        else println("Add NOT Successful")
+        do{
+            if (deck.addFlashcard(createFlashcard()))
+                println("Add Successful!")
+            else println("Add NOT Successful")
+            continueAdding = readNextInt("Would you like to continue adding flashcards to this deck? (1- Yes | Any Other Number- No): ")
+        } while (continueAdding == 1)
     }
 }
 
-fun updateFlashcardInDeck() {
+fun updateFlashcardsInDeck() {
     val deck: Deck? = askUserToChooseDeck()
     if (deck != null) {
         val flashcard: Flashcard? = askUserToChooseFlashcard(deck)
@@ -252,13 +307,6 @@ fun searchDecks() {
 //------------------------------------
 
 
-//------------------------------------
-// Exit App
-//------------------------------------
-fun exitApp() {
-    println("Exiting...bye")
-    exitProcess(0)
-}
 
 //------------------------------------
 //HELPER FUNCTIONS
@@ -284,7 +332,7 @@ private fun askUserToChooseFlashcard(deck: Deck): Flashcard? {
         return deck.findFlashcard(readNextInt("\nEnter the id of the flashcard: "))
     }
     else{
-        println ("No items for chosen note")
+        println ("No flashcards for chosen deck")
         return null
     }
 }
@@ -313,4 +361,12 @@ fun load(){
     } catch (e: Exception){
         System.err.println("Error reading from file: $e")
     }
+}
+
+//------------------------------------
+// Exit App
+//------------------------------------
+fun exitApp() {
+    println("Exiting...bye")
+    exitProcess(0)
 }

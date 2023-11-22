@@ -6,7 +6,7 @@ import java.time.LocalDate
 data class Deck(
     var deckId: Int = 0,
     var title: String ="",
-    var theme: String ="",
+    var theme: String = "",
     var lastDateAccessed: LocalDate? = null,
     var level: String = "",
     var flashcards: MutableSet<Flashcard> = mutableSetOf())
