@@ -1,6 +1,8 @@
 import controllers.DeckAPI
 import models.Deck
 import models.Flashcard
+import persistence.JSONSerializer
+import persistence.XMLSerializer
 import persistence.YAMLSerializer
 import utils.ScannerInput.readNextInt
 import utils.ScannerInput.readNextLine
@@ -15,7 +17,6 @@ import kotlin.system.exitProcess
 import kotlin.random.Random
 
 private val deckAPI = DeckAPI(YAMLSerializer(File("decks.yaml")))
-
 
 fun main() = runMenu()
 
@@ -119,7 +120,7 @@ fun play(){
             chosenDeck.lastDateAccessed = LocalDate.now()
 
             println("")
-            println("Your percentage of hits is: $greenColour ${chosenDeck.calculateHitsPercentage()} $resetColour")
+            println("Your percentage of hits is: $greenColour ${chosenDeck.calculateHitsPercentage()}% $resetColour")
 
 
             var markAsFavourite =

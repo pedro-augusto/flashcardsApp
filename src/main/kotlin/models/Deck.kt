@@ -56,11 +56,10 @@ data class Deck(
          if (flashcards.isEmpty())  "\tNO FLASHCARDS ADDED"
          else  Utilities.formatSetString(flashcards)
 
-    fun calculateHitsPercentage(): String {
+        fun calculateHitsPercentage(): Double {
         val hitsNumber = flashcards.filter{ flashcard -> flashcard.hit == "Hit" }.size.toDouble()
         val percentage: Double = (hitsNumber/flashcards.size.toDouble())*100
-        return "$percentage%"
-
+        return percentage
     }
 
     override fun toString(): String {

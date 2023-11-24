@@ -69,62 +69,62 @@ class DeckAPI(serializerType: Serializer) {
     // ----------------------------------------------
     //  SEARCHING METHODS
     // ---------------------------------------------
-    fun findDeck(deckId : Int) =  decks.find{ deck -> deck.deckId == deckId }
+    fun findDeck(deckId: Int) = decks.find { deck -> deck.deckId == deckId }
 
     fun searchDecksByTitle(searchString: String) =
-       formatListString(
+        formatListString(
             decks.filter { deck -> deck.title.contains(searchString, ignoreCase = true) }
         )
 
-/*    fun searchItemByContents(searchString: String): String {
-        return if (numberOfNotes() == 0) "No notes stored"
-        else {
-            var listOfNotes = ""
-            for (note in notes) {
-                for (item in note.items) {
-                    if (item.itemContents.contains(searchString, ignoreCase = true)) {
-                        listOfNotes += "${note.noteId}: ${note.noteTitle} \n\t${item}\n"
+    /*    fun searchItemByContents(searchString: String): String {
+            return if (numberOfNotes() == 0) "No notes stored"
+            else {
+                var listOfNotes = ""
+                for (note in notes) {
+                    for (item in note.items) {
+                        if (item.itemContents.contains(searchString, ignoreCase = true)) {
+                            listOfNotes += "${note.noteId}: ${note.noteTitle} \n\t${item}\n"
+                        }
                     }
                 }
+                if (listOfNotes == "") "No items found for: $searchString"
+                else listOfNotes
             }
-            if (listOfNotes == "") "No items found for: $searchString"
-            else listOfNotes
-        }
-    }*/
+        }*/
 
     // ----------------------------------------------
     //  LISTING METHODS FOR ITEMS
     // ----------------------------------------------
-/*
-    fun listTodoItems(): String =
-         if (numberOfNotes() == 0) "No notes stored"
-         else {
-             var listOfTodoItems = ""
-             for (note in notes) {
-                 for (item in note.items) {
-                     if (!item.isItemComplete) {
-                         listOfTodoItems += note.noteTitle + ": " + item.itemContents + "\n"
+    /*
+        fun listTodoItems(): String =
+             if (numberOfNotes() == 0) "No notes stored"
+             else {
+                 var listOfTodoItems = ""
+                 for (note in notes) {
+                     for (item in note.items) {
+                         if (!item.isItemComplete) {
+                             listOfTodoItems += note.noteTitle + ": " + item.itemContents + "\n"
+                         }
                      }
                  }
+                 listOfTodoItems
              }
-             listOfTodoItems
-         }
-*/
+    */
 
     // ----------------------------------------------
     //  COUNTING METHODS FOR ITEMS
     // ----------------------------------------------
-/*    fun numberOfToDoItems(): Int {
-        var numberOfToDoItems = 0
-        for (note in notes) {
-            for (item in note.items) {
-                if (!item.isItemComplete) {
-                    numberOfToDoItems++
+    /*    fun numberOfToDoItems(): Int {
+            var numberOfToDoItems = 0
+            for (note in notes) {
+                for (item in note.items) {
+                    if (!item.isItemComplete) {
+                        numberOfToDoItems++
+                    }
                 }
             }
-        }
-        return numberOfToDoItems
-    }*/
+            return numberOfToDoItems
+        }*/
 
     // ----------------------------------------------
     //  PERSISTENCE
@@ -133,14 +133,14 @@ class DeckAPI(serializerType: Serializer) {
     /**
      * Loads decks from the serializer.
      */
-    fun load(){
+    fun load() {
         decks = serializer.read() as ArrayList<Deck>
     }
 
     /**
      * Stores decks using the serializer.
      */
-    fun store(){
+    fun store() {
         serializer.write(decks)
     }
 }

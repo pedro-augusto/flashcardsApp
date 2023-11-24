@@ -3,7 +3,9 @@ package controllers
 import models.Deck
 import models.Flashcard
 import org.junit.jupiter.api.AfterEach
-import org.junit.jupiter.api.Assertions.*
+import kotlin.test.assertEquals
+import kotlin.test.assertFalse
+import kotlin.test.assertTrue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Nested
 import persistence.YAMLSerializer
