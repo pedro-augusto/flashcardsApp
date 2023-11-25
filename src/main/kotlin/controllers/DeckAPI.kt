@@ -91,7 +91,7 @@ class DeckAPI(serializerType: Serializer) {
         return if (decksWithLevelChosen.isNotEmpty()) {
             formatListString(decksWithLevelChosen)
         } else {
-            "No decks with this level stored"
+            "No decks with flashcards with this level stored"
         }
     }
 
@@ -118,7 +118,7 @@ class DeckAPI(serializerType: Serializer) {
         return if (neverPlayedDecks.isNotEmpty()) {
             formatListString(neverPlayedDecks)
         } else {
-            "There are no decks with flashcards that haven't already been played"
+            "There is either no decks with flashcards that haven't already been played or no decks with flashcards at all"
         }
     }
 
@@ -159,7 +159,7 @@ class DeckAPI(serializerType: Serializer) {
     }
 
     fun listDecksByMostMarkedAsFavourite(): String {
-        val decksLowestAverageAttempts = decks.filter { deck: Deck -> deck.lastDateAccessed != null && deck.calculateNoOfFavouriteFlashcards() > 0 }.sortedByDescending { deck: Deck -> deck.calculateNoOfFavouriteFlashcards() }
+        val decksLowestAverageAttempts = decks.filter { deck: Deck -> deck.lastDateAccessed != null && deck.calculateNoOfFavouriteFlashcards()!! > 0 }.sortedByDescending { deck: Deck -> deck.calculateNoOfFavouriteFlashcards() }
         return if (decksLowestAverageAttempts.isNotEmpty()) {
             formatListString(decksLowestAverageAttempts)
         } else {
@@ -181,6 +181,11 @@ class DeckAPI(serializerType: Serializer) {
     fun numberOfDecksWithFlashcards(): Int = decks.count { deck: Deck -> deck.flashcards.isNotEmpty() }
     fun numberOfEmptyDecks(): Int = decks.count { deck: Deck -> deck.flashcards.isEmpty() }
     fun numberOfDecksPlayed(): Int = decks.count { deck: Deck -> deck.lastDateAccessed != null }
+    fun numberOfDecksByTheme(theme: String): Int = decks.count { deck: Deck -> deck.theme == theme }
+    fun numberOfDecksByLevelNotEmpty(level: String): Int = decks.count { deck: Deck -> deck.level == level && deck.flashcards.isNotEmpty() }
+    fun numberOfDecksByLevel(level: String): Int = decks.count { deck: Deck -> deck.level == level }
+
+    fun numberOfDecksNeverPlayed(): Int = decks.count { deck: Deck -> deck.flashcards.isNotEmpty() && deck.lastDateAccessed == null }
 
     // ----------------------------------------------
     //  SEARCHING METHODS

@@ -209,6 +209,149 @@ class DeckAPITest {
                 assertTrue(notesString.contains("Trip and Adventure", true))
             }
         }
+
+        @Nested
+        inner class ByTheme {
+            @Test
+            fun `listDecksByTheme returns correct decks when array is populated`() {
+                assertEquals(2, populatedArray!!.numberOfDecksByTheme("Professional"))
+                assertTrue(populatedArray!!.listDecksByTheme("Professional").contains("Missed Opportunities", true))
+                assertTrue(populatedArray!!.listDecksByTheme("Professional").contains("French Business Terms", true))
+                assertFalse(populatedArray!!.listDecksByTheme("Professional").contains("Mixed Feelings", true))
+                assertFalse(populatedArray!!.listDecksByTheme("Professional").contains("Trip and Adventure", true))
+                assertFalse(populatedArray!!.listDecksByTheme("Professional").contains("School Vocabulary", true))
+            }
+
+            @Test
+            fun `listDecksByTheme returns message when there are no decks with that category in a populated array`() {
+                assertEquals(0, populatedArray!!.numberOfDecksByTheme("Everyday"))
+                assertTrue(populatedArray!!.listDecksByTheme("Everyday").contains("No decks with this theme stored", true))
+            }
+
+            @Test
+            fun `listDecksByTheme returns message when array is empty`() {
+                assertEquals(0, emptyArray!!.numberOfDecksByTheme("Everyday"))
+                assertEquals(0, emptyArray!!.numberOfDecksByTheme("Academic"))
+                assertEquals(0, emptyArray!!.numberOfDecksByTheme("Professional"))
+                assertEquals(0, emptyArray!!.numberOfDecksByTheme("Cultural and Idiomatic"))
+                assertEquals(0, emptyArray!!.numberOfDecksByTheme("Emotions and Feelings"))
+                assertTrue(emptyArray!!.listDecksByTheme("Everyday").contains("No decks with this theme stored", true))
+                assertTrue(emptyArray!!.listDecksByTheme("Academic").contains("No decks with this theme stored", true))
+                assertTrue(emptyArray!!.listDecksByTheme("Professional").contains("No decks with this theme stored", true))
+                assertTrue(emptyArray!!.listDecksByTheme("Cultural and Idiomatic").contains("No decks with this theme stored", true))
+                assertTrue(emptyArray!!.listDecksByTheme("Emotions and Feelings").contains("No decks with this theme stored", true))
+            }
+        }
+
+        @Nested
+        inner class ByLevelNotEmpty {
+            @Test
+            fun `listDecksByLevelNotEmpty returns correct decks when array is populated`() {
+                assertEquals(2, populatedArray!!.numberOfDecksByLevelNotEmpty("Intermediate"))
+                assertTrue(populatedArray!!.listDecksByLevelNotEmpty("Intermediate").contains("Mixed Feelings", true))
+                assertTrue(populatedArray!!.listDecksByLevelNotEmpty("Intermediate").contains("School Vocabulary", true))
+                assertFalse(populatedArray!!.listDecksByLevelNotEmpty("Intermediate").contains("French Business Terms", true))
+                assertFalse(populatedArray!!.listDecksByLevelNotEmpty("Intermediate").contains("Trip and Adventure", true))
+                assertFalse(populatedArray!!.listDecksByLevelNotEmpty("Intermediate").contains("Missed Opportunities", true))
+            }
+
+            @Test
+            fun `listDecksByLevelNotEmpty returns message when there are no decks with that level in a populated array`() {
+                assertEquals(0, populatedArray!!.numberOfDecksByLevelNotEmpty("Beginner"))
+                assertTrue(populatedArray!!.listDecksByLevelNotEmpty("Beginner").contains("No decks with flashcards with this level stored", true))
+            }
+
+            @Test
+            fun `listDecksByLevelNotEmpty returns message when array is empty`() {
+                assertEquals(0, emptyArray!!.numberOfDecksByLevelNotEmpty("Beginner"))
+                assertEquals(0, emptyArray!!.numberOfDecksByLevelNotEmpty("Intermediate"))
+                assertEquals(0, emptyArray!!.numberOfDecksByLevelNotEmpty("Advanced"))
+                assertEquals(0, emptyArray!!.numberOfDecksByLevelNotEmpty("Proficient"))
+                assertTrue(emptyArray!!.listDecksByLevelNotEmpty("Beginner").contains("No decks with flashcards with this level stored", true))
+                assertTrue(emptyArray!!.listDecksByLevelNotEmpty("Intermediate").contains("No decks with flashcards with this level stored", true))
+                assertTrue(emptyArray!!.listDecksByLevelNotEmpty("Advanced").contains("No decks with flashcards with this level stored", true))
+                assertTrue(emptyArray!!.listDecksByLevelNotEmpty("Proficient").contains("No decks with flashcards with this level stored", true))
+            }
+        }
+
+        @Nested
+        inner class ByLevel {
+            @Test
+            fun `listDecksByLevel returns correct decks when array is populated`() {
+                assertEquals(3, populatedArray!!.numberOfDecksByLevel("Intermediate"))
+                assertTrue(populatedArray!!.listDecksByLevel("Intermediate").contains("Mixed Feelings", true))
+                assertTrue(populatedArray!!.listDecksByLevel("Intermediate").contains("School Vocabulary", true))
+                assertTrue(populatedArray!!.listDecksByLevel("Intermediate").contains("French Business Terms", true))
+                assertFalse(populatedArray!!.listDecksByLevel("Intermediate").contains("Trip and Adventure", true))
+                assertFalse(populatedArray!!.listDecksByLevel("Intermediate").contains("Missed Opportunities", true))
+            }
+
+            @Test
+            fun `listDecksByLevel returns message when there are no decks with that level in a populated array`() {
+                assertEquals(0, populatedArray!!.numberOfDecksByLevel("Beginner"))
+                assertTrue(populatedArray!!.listDecksByLevel("Beginner").contains("No decks with this level stored", true))
+            }
+
+            @Test
+            fun `listDecksByLevelNotEmpty returns message when array is empty`() {
+                assertEquals(0, emptyArray!!.numberOfDecksByLevel("Beginner"))
+                assertEquals(0, emptyArray!!.numberOfDecksByLevel("Intermediate"))
+                assertEquals(0, emptyArray!!.numberOfDecksByLevel("Advanced"))
+                assertEquals(0, emptyArray!!.numberOfDecksByLevel("Proficient"))
+                assertTrue(emptyArray!!.listDecksByLevelNotEmpty("Beginner").contains("No decks with flashcards with this level stored", true))
+                assertTrue(emptyArray!!.listDecksByLevelNotEmpty("Intermediate").contains("No decks with flashcards with this level stored", true))
+                assertTrue(emptyArray!!.listDecksByLevelNotEmpty("Advanced").contains("No decks with flashcards with this level stored", true))
+                assertTrue(emptyArray!!.listDecksByLevelNotEmpty("Proficient").contains("No decks with flashcards with this level stored", true))
+            }
+        }
+
+        @Nested
+        inner class NeverPlayed {
+            @Test
+            fun `listNeverPlayedDecks returns correct decks when array is populated`() {
+                assertEquals(1, populatedArray!!.numberOfDecksNeverPlayed())
+
+                assertTrue(populatedArray!!.listNeverPlayedDecks().contains("School Vocabulary", true)) // not empty date null
+                assertFalse(populatedArray!!.listNeverPlayedDecks().contains("Trip and Adventure", true)) // empty
+                assertFalse(populatedArray!!.listNeverPlayedDecks().contains("French Business Terms", true)) // empty
+                assertFalse(populatedArray!!.listNeverPlayedDecks().contains("Mixed Feelings", true)) // not empty date not null
+                assertFalse(populatedArray!!.listNeverPlayedDecks().contains("Missed Opportunities", true)) // not empty date not null
+            }
+
+            @Test
+            fun `listNeverPlayedDecks returns message decks when array is populated and all decks have been played`() {
+                populatedArray!!.findDeck(0)!!.lastDateAccessed = LocalDate.now()
+                populatedArray!!.findDeck(1)!!.lastDateAccessed = LocalDate.now()
+                populatedArray!!.findDeck(2)!!.lastDateAccessed = LocalDate.now()
+                populatedArray!!.findDeck(3)!!.lastDateAccessed = LocalDate.now()
+                populatedArray!!.findDeck(4)!!.lastDateAccessed = LocalDate.now()
+                assertEquals(0, populatedArray!!.numberOfDecksNeverPlayed())
+                assertTrue(populatedArray!!.listNeverPlayedDecks().contains("There is either no decks with flashcards that haven't already been played or no decks with flashcards at all", true))
+            }
+
+            @Test
+            fun `listNeverPlayedDecks returns message decks when array is empty`() {
+                assertEquals(0, emptyArray!!.numberOfDecksNeverPlayed())
+                assertTrue(emptyArray!!.listNeverPlayedDecks().contains("There is either no decks with flashcards that haven't already been played or no decks with flashcards at all", true))
+            }
+        }
+
+       /* @Nested
+        inner class ByMostRecentlyPlayed {
+            @Test
+            fun `listDecksByMostRecentlyPlayed returns decks in correct order when array is populated`() {
+                populatedArray!!.findDeck(4)!!.lastDateAccessed = LocalDate.now()
+                populatedArray!!.findDeck(3)!!.lastDateAccessed = LocalDate.now().minusDays(1)
+                populatedArray!!.findDeck(2)!!.lastDateAccessed = LocalDate.now().minusDays(2)
+                populatedArray!!.findDeck(1)!!.lastDateAccessed = LocalDate.now().minusDays(3)
+                populatedArray!!.findDeck(0)!!.lastDateAccessed = LocalDate.now().minusDays(4)
+
+                val first = populatedArray!!.findDeck(4)!!.toString()
+                val last = populatedArray!!.findDeck(0)!!.toString()
+                assertTrue(populatedArray!!.listDecksByMostRecentlyPlayed().startsWith(first))
+                assertTrue(populatedArray!!.listDecksByMostRecentlyPlayed().endsWith(last))
+            }
+        }*/
     }
 
     @Nested

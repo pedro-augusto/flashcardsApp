@@ -66,18 +66,32 @@ data class Deck(
         return if (numberOfFlashcards() > 0) {
             val hitsNumber = flashcards.filter { flashcard -> flashcard.hit == "Hit" }.size.toDouble()
             (hitsNumber / flashcards.size.toDouble()) * 100
-        } else null
+        } else {
+            null
+        }
     }
 
-    fun calculateDeckAverageAttemptNo(): Double = flashcards.sumOf { flashcard: Flashcard -> flashcard.attempts.toDouble() } / flashcards.size
+    fun calculateDeckAverageAttemptNo(): Double? {
+        if (flashcards.isNotEmpty()) {
+            return flashcards.sumOf { flashcard: Flashcard -> flashcard.attempts.toDouble() } / flashcards.size
+        } else {
+            return null
+        }
+    }
 
-    fun calculateNoOfFavouriteFlashcards(): Int = flashcards.count { flashcard: Flashcard -> flashcard.favourite }
+    fun calculateNoOfFavouriteFlashcards(): Int? {
+        if (flashcards.isNotEmpty()) {
+            return flashcards.count { flashcard: Flashcard -> flashcard.favourite }
+        } else {
+            return null
+        }
+    }
 
     override fun toString(): String {
         val lastDateAccessedString = if (lastDateAccessed != null) {
             " LAST ACCESS: ${lastDateAccessed?.format(
                 DateTimeFormatter.ofLocalizedDate(FormatStyle.SHORT)
-            )}  | HITS: ${numberOfHits()}/${flashcards.size} (${calculateHitsPercentage()}%)  | AVERAGE ATTEMPT NUMBER: ${calculateDeckAverageAttemptNo().toBigDecimal().setScale(2, RoundingMode.HALF_UP)} | FAVOURITES: ${calculateNoOfFavouriteFlashcards()}/${flashcards.size}"
+            )}  | HITS: ${numberOfHits()}/${flashcards.size} (${calculateHitsPercentage()}%)  | AVERAGE ATTEMPT NUMBER: ${calculateDeckAverageAttemptNo()!!.toBigDecimal().setScale(2, RoundingMode.HALF_UP)} | FAVOURITES: ${calculateNoOfFavouriteFlashcards()}/${flashcards.size}"
         } else {
             " HAS NOT BEEN PLAYED YET"
         }
