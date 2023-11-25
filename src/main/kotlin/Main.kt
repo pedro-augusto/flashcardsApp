@@ -68,7 +68,7 @@ fun mainMenu() = readNextInt(
          > |   18) .....                                       |
          > |   19) .....                                       |
          > ----------------------------------------------------- 
-         > |   20) Save decks                                   
+         > |   20) Save decks                                  |     
          > |   21) Load decks                                  |
          > |   0) Exit                                         |
          > -----------------------------------------------------  
@@ -224,38 +224,62 @@ fun chooseLevel(): String {
 
 fun listDecks(page: String) {
     if (deckAPI.numberOfDecks() > 0) {
-        if (page != "alternate") {
-            val option = readNextInt(
-                """
-                      > --------------------------------------
-                      > |   1) View ALL decks                |
-                      > |   2) View DECKS WITH FLASHCARDS    |
-                      > |   3) View EMPTY decks              |
-                      > --------------------------------------
-             > ==>> """.trimMargin(">")
-            )
+        var chosenOption: Int
+        var promptString: String = """
+           ----------------------------------------------
+           |   LIST DECKS                               
+           ----------------------------------------------
+        """.trimIndent()
 
-            when (option) {
-                1 -> listAllDecks()
-                2 -> listDecksWithFlashcards()
-                3 -> listEmptyDecks()
-                else -> println("Invalid option entered: $option")
-            }
+        val listingOptionsEmpty = setOf("All decks", "Empty decks")
+        val listingOptionsNotEmpty = setOf("Decks with flashcards", "Decks by theme", "Decks by level", "Most recently played decks", "Least recently played decks", "Never played decks")
+        val finalListingOptions: MutableSet<String>
+
+        if (page == "alternate") {
+            finalListingOptions = listingOptionsNotEmpty as MutableSet<String>
         } else {
-            val option = readNextInt(
-                """
-                      > --------------------------------------
-                      > |   1) View DECKS WITH FLASHCARDS    |
-                      > |   2)                               |
-                      > --------------------------------------
-             > ==>> """.trimMargin(">")
-            )
-
-            when (option) {
-                1 -> listDecksWithFlashcards()
-                else -> println("Invalid option entered: $option")
-            }
+            finalListingOptions = listingOptionsEmpty.plus(listingOptionsNotEmpty) as MutableSet<String>
         }
+
+        finalListingOptions.forEachIndexed { index, option: String ->
+            promptString += """
+                
+                | ${index + 1}. $option
+            """.trimIndent()
+        }
+
+        promptString += """
+            
+            ----------------------------------------------
+            ==>> 
+        """.trimIndent()
+        do {
+            chosenOption = readNextInt(promptString)
+
+            if (page != "alternate") {
+                when (chosenOption) {
+                    1 -> listAllDecks()
+                    2 -> listDecksWithFlashcards()
+                    3 -> listEmptyDecks()
+                    4 -> listDeckByTheme()
+                    5 -> listDeckByLevel()
+                    6 -> listMostRecentlyPlayedDecks()
+                    7 -> listLeastRecentlyPlayedDecks()
+                    8 -> listNeverPlayedDecks()
+                    else -> println("Invalid option entered: $chosenOption")
+                }
+            } else {
+                when (chosenOption) {
+                    1 -> listDecksWithFlashcards()
+                    2 -> listDeckByThemeNotEmpty()
+                    3 -> listDeckByLevelNotEmpty()
+                    4 -> listMostRecentlyPlayedDecks()
+                    5 -> listLeastRecentlyPlayedDecks()
+                    6 -> listNeverPlayedDecks()
+                    else -> println("Invalid option entered: $chosenOption")
+                }
+            }
+        } while (chosenOption !in 1..finalListingOptions.size+1)
     } else {
         println("Option Invalid - No decks stored")
     }
@@ -264,7 +288,13 @@ fun listDecks(page: String) {
 fun listAllDecks() = println(deckAPI.listAllDecks())
 fun listDecksWithFlashcards() = println(deckAPI.listDecksWithFlashcards())
 fun listEmptyDecks() = println(deckAPI.listEmptyDecks())
-
+fun listDeckByTheme() = println(deckAPI.listDecksByTheme(chooseTheme()))
+fun listDeckByThemeNotEmpty() = println(deckAPI.listDecksByThemeNotEmpty(chooseTheme()))
+fun listDeckByLevel() = println(deckAPI.listDecksByLevel(chooseLevel()))
+fun listDeckByLevelNotEmpty() = println(deckAPI.listDecksByLevelNotEmpty(chooseLevel()))
+fun listMostRecentlyPlayedDecks() = println(deckAPI.listDecksByMostRecentlyPlayed())
+fun listLeastRecentlyPlayedDecks() = println(deckAPI.listDecksByLeastRecentlyPlayed())
+fun listNeverPlayedDecks() = println(deckAPI.listNeverPlayedDecks())
 fun updateDeck() {
     listDecks("all")
     if (deckAPI.numberOfDecks() > 0) {

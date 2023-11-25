@@ -59,6 +59,69 @@ class DeckAPI(serializerType: Serializer) {
             formatListString(decks.filter { deck -> deck.flashcards.isNotEmpty() })
         }
 
+    fun listDecksByTheme(theme: String): String {
+        val decksWithThemeChosen = decks.filter { deck: Deck -> deck.theme == theme }
+        if (decksWithThemeChosen.isNotEmpty()) {
+            return formatListString(decksWithThemeChosen)
+        } else {
+            return "No decks with this theme stored"
+        }
+    }
+
+    fun listDecksByThemeNotEmpty(theme: String): String {
+        val decksWithThemeChosen = decks.filter { deck: Deck -> deck.theme == theme && deck.flashcards.isNotEmpty() }
+        if (decksWithThemeChosen.isNotEmpty()) {
+            return formatListString(decksWithThemeChosen)
+        } else {
+            return "No decks with this theme stored"
+        }
+    }
+
+    fun listDecksByLevel(level: String): String {
+        val decksWithLevelChosen = decks.filter { deck: Deck -> deck.level == level }
+        if (decksWithLevelChosen.isNotEmpty()) {
+            return formatListString(decksWithLevelChosen)
+        } else {
+            return "No decks with this level stored"
+        }
+    }
+
+    fun listDecksByLevelNotEmpty(level: String): String {
+        val decksWithLevelChosen = decks.filter { deck: Deck -> deck.level == level && deck.flashcards.isNotEmpty() }
+        if (decksWithLevelChosen.isNotEmpty()) {
+            return formatListString(decksWithLevelChosen)
+        } else {
+            return "No decks with this level stored"
+        }
+    }
+
+    fun listDecksByMostRecentlyPlayed(): String {
+        if (numberOfDecksPlayed() > 0) {
+            val mostRecentlyPlayedDecks = decks.filter { deck: Deck -> deck.lastDateAccessed != null }.sortedByDescending { deck: Deck -> deck.lastDateAccessed }
+            return formatListString(mostRecentlyPlayedDecks)
+        } else {
+            return "You have not played with any deck yet."
+        }
+    }
+
+    fun listDecksByLeastRecentlyPlayed(): String {
+        if (numberOfDecksPlayed() > 0) {
+            val leastRecentlyPlayedDecks = decks.filter { deck: Deck -> deck.lastDateAccessed != null }.sortedBy { deck: Deck -> deck.lastDateAccessed }
+            return formatListString(leastRecentlyPlayedDecks)
+        } else {
+            return "You have not played with any deck yet."
+        }
+    }
+
+    fun listNeverPlayedDecks(): String {
+        val neverPlayedDecks = decks.filter { deck: Deck -> deck.flashcards.isNotEmpty() && deck.lastDateAccessed == null }
+        if (neverPlayedDecks.isNotEmpty()) {
+            return formatListString(neverPlayedDecks)
+        } else {
+            return "There are no decks with flashcards that haven't already been played"
+        }
+    }
+
     fun listEmptyDecks() =
         if (numberOfEmptyDecks() == 0) {
             "No empty decks stored"
@@ -72,6 +135,7 @@ class DeckAPI(serializerType: Serializer) {
     fun numberOfDecks() = decks.size
     fun numberOfDecksWithFlashcards(): Int = decks.count { deck: Deck -> deck.flashcards.isNotEmpty() }
     fun numberOfEmptyDecks(): Int = decks.count { deck: Deck -> deck.flashcards.isEmpty() }
+    fun numberOfDecksPlayed(): Int = decks.count { deck: Deck -> deck.lastDateAccessed != null }
 
     // ----------------------------------------------
     //  SEARCHING METHODS
