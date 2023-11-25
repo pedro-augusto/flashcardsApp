@@ -8,5 +8,4 @@ data class Flashcard(
     var hit: String = "Not Attempted",
     var attempts: Int = 0,
     var favourite: Boolean = false
-) {
-}
+)

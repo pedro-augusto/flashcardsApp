@@ -60,7 +60,7 @@ data class Deck(
         }
 
     fun calculateHitsPercentage(): Double? {
-        if(numberOfFlashcards()>0) {
+        if (numberOfFlashcards() > 0) {
             val hitsNumber = flashcards.filter { flashcard -> flashcard.hit == "Hit" }.size.toDouble()
             val percentage: Double = (hitsNumber / flashcards.size.toDouble()) * 100
             return percentage

@@ -421,6 +421,7 @@ private fun askUserToChooseFlashcard(deck: Deck): Flashcard? {
 fun save() {
     try {
         deckAPI.store()
+        println("Data successfully saved")
     } catch (e: Exception) {
         System.err.println("Error writing to file: $e")
     }
@@ -432,6 +433,7 @@ fun save() {
 fun load() {
     try {
         deckAPI.load()
+        println("Data successfully loaded")
     } catch (e: Exception) {
         System.err.println("Error reading from file: $e")
     }
