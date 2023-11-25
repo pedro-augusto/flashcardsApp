@@ -10,7 +10,6 @@ class DeckAPI(serializerType: Serializer) {
     private var serializer: Serializer = serializerType
     private var decks = ArrayList<Deck>()
 
-
     // ----------------------------------------------
     //  For Managing the id internally in the program
     // ----------------------------------------------
@@ -43,21 +42,29 @@ class DeckAPI(serializerType: Serializer) {
         return false
     }
 
-
     // ----------------------------------------------
     //  LISTING METHODS FOR DECK ArrayList
     // ----------------------------------------------
     fun listAllDecks() =
-        if (decks.isEmpty()) "No decks stored"
-        else formatListString(decks)
+        if (decks.isEmpty()) {
+            "No decks stored"
+        } else {
+            formatListString(decks)
+        }
 
     fun listDecksWithFlashcards() =
-        if (numberOfDecksWithFlashcards() == 0) "No decks with flashcards stored"
-        else formatListString(decks.filter { deck -> deck.flashcards.isNotEmpty() })
+        if (numberOfDecksWithFlashcards() == 0) {
+            "No decks with flashcards stored"
+        } else {
+            formatListString(decks.filter { deck -> deck.flashcards.isNotEmpty() })
+        }
 
     fun listEmptyDecks() =
-        if (numberOfEmptyDecks() == 0) "No empty decks stored"
-        else formatListString(decks.filter { deck -> deck.flashcards.isEmpty() })
+        if (numberOfEmptyDecks() == 0) {
+            "No empty decks stored"
+        } else {
+            formatListString(decks.filter { deck -> deck.flashcards.isEmpty() })
+        }
 
     // ----------------------------------------------
     //  COUNTING METHODS FOR NOTE ArrayList

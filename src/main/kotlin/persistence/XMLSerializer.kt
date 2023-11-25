@@ -12,7 +12,7 @@ import java.io.FileWriter
  *
  * @property file The file used for reading and writing operations.
  */
-class XMLSerializer(private val file: File): Serializer {
+class XMLSerializer(private val file: File) : Serializer {
 
     /**
      * Reads an object from a file using XStream library with DomDriver and returns the read object.
@@ -41,5 +41,4 @@ class XMLSerializer(private val file: File): Serializer {
         outputStream.writeObject(obj)
         outputStream.close()
     }
-
 }
