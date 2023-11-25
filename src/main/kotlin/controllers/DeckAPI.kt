@@ -61,64 +61,109 @@ class DeckAPI(serializerType: Serializer) {
 
     fun listDecksByTheme(theme: String): String {
         val decksWithThemeChosen = decks.filter { deck: Deck -> deck.theme == theme }
-        if (decksWithThemeChosen.isNotEmpty()) {
-            return formatListString(decksWithThemeChosen)
+        return if (decksWithThemeChosen.isNotEmpty()) {
+            formatListString(decksWithThemeChosen)
         } else {
-            return "No decks with this theme stored"
+            "No decks with this theme stored"
         }
     }
 
     fun listDecksByThemeNotEmpty(theme: String): String {
         val decksWithThemeChosen = decks.filter { deck: Deck -> deck.theme == theme && deck.flashcards.isNotEmpty() }
-        if (decksWithThemeChosen.isNotEmpty()) {
-            return formatListString(decksWithThemeChosen)
+        return if (decksWithThemeChosen.isNotEmpty()) {
+            formatListString(decksWithThemeChosen)
         } else {
-            return "No decks with this theme stored"
+            "No decks with this theme stored"
         }
     }
 
     fun listDecksByLevel(level: String): String {
         val decksWithLevelChosen = decks.filter { deck: Deck -> deck.level == level }
-        if (decksWithLevelChosen.isNotEmpty()) {
-            return formatListString(decksWithLevelChosen)
+        return if (decksWithLevelChosen.isNotEmpty()) {
+            formatListString(decksWithLevelChosen)
         } else {
-            return "No decks with this level stored"
+            "No decks with this level stored"
         }
     }
 
     fun listDecksByLevelNotEmpty(level: String): String {
         val decksWithLevelChosen = decks.filter { deck: Deck -> deck.level == level && deck.flashcards.isNotEmpty() }
-        if (decksWithLevelChosen.isNotEmpty()) {
-            return formatListString(decksWithLevelChosen)
+        return if (decksWithLevelChosen.isNotEmpty()) {
+            formatListString(decksWithLevelChosen)
         } else {
-            return "No decks with this level stored"
+            "No decks with this level stored"
         }
     }
 
     fun listDecksByMostRecentlyPlayed(): String {
-        if (numberOfDecksPlayed() > 0) {
+        return if (numberOfDecksPlayed() > 0) {
             val mostRecentlyPlayedDecks = decks.filter { deck: Deck -> deck.lastDateAccessed != null }.sortedByDescending { deck: Deck -> deck.lastDateAccessed }
-            return formatListString(mostRecentlyPlayedDecks)
+            formatListString(mostRecentlyPlayedDecks)
         } else {
-            return "You have not played with any deck yet."
+            "You have not played with any deck yet."
         }
     }
 
     fun listDecksByLeastRecentlyPlayed(): String {
-        if (numberOfDecksPlayed() > 0) {
+        return if (numberOfDecksPlayed() > 0) {
             val leastRecentlyPlayedDecks = decks.filter { deck: Deck -> deck.lastDateAccessed != null }.sortedBy { deck: Deck -> deck.lastDateAccessed }
-            return formatListString(leastRecentlyPlayedDecks)
+            formatListString(leastRecentlyPlayedDecks)
         } else {
-            return "You have not played with any deck yet."
+            "You have not played with any deck yet."
         }
     }
 
     fun listNeverPlayedDecks(): String {
         val neverPlayedDecks = decks.filter { deck: Deck -> deck.flashcards.isNotEmpty() && deck.lastDateAccessed == null }
-        if (neverPlayedDecks.isNotEmpty()) {
-            return formatListString(neverPlayedDecks)
+        return if (neverPlayedDecks.isNotEmpty()) {
+            formatListString(neverPlayedDecks)
         } else {
-            return "There are no decks with flashcards that haven't already been played"
+            "There are no decks with flashcards that haven't already been played"
+        }
+    }
+
+    fun listDecksByNumberOfHits(): String {
+        val decksWithMostHits = decks.filter { deck: Deck -> deck.lastDateAccessed != null }.sortedByDescending { deck: Deck -> deck.numberOfHits() }
+        return if (decksWithMostHits.isNotEmpty()) {
+            formatListString(decksWithMostHits)
+        } else {
+            "You have not played with any deck yet."
+        }
+    }
+
+    fun listDecksByNumberOfMisses(): String {
+        val decksWithMostMisses = decks.filter { deck: Deck -> deck.lastDateAccessed != null }.sortedBy { deck: Deck -> deck.numberOfHits() }
+        return if (decksWithMostMisses.isNotEmpty()) {
+            formatListString(decksWithMostMisses)
+        } else {
+            "You have not played with any deck yet."
+        }
+    }
+
+    fun listDecksByHighestAverageAttemptNo(): String {
+        val decksHighestAverageAttempts = decks.filter { deck: Deck -> deck.lastDateAccessed != null }.sortedByDescending { deck: Deck -> deck.calculateDeckAverageAttemptNo() }
+        return if (decksHighestAverageAttempts.isNotEmpty()) {
+            formatListString(decksHighestAverageAttempts)
+        } else {
+            "You have not played with any deck yet."
+        }
+    }
+
+    fun listDecksByLowestAverageAttemptNo(): String {
+        val decksLowestAverageAttempts = decks.filter { deck: Deck -> deck.lastDateAccessed != null }.sortedBy { deck: Deck -> deck.calculateDeckAverageAttemptNo() }
+        return if (decksLowestAverageAttempts.isNotEmpty()) {
+            formatListString(decksLowestAverageAttempts)
+        } else {
+            "You have not played with any deck yet."
+        }
+    }
+
+    fun listDecksByMostMarkedAsFavourite(): String {
+        val decksLowestAverageAttempts = decks.filter { deck: Deck -> deck.lastDateAccessed != null && deck.calculateNoOfFavouriteFlashcards() > 0 }.sortedByDescending { deck: Deck -> deck.calculateNoOfFavouriteFlashcards() }
+        return if (decksLowestAverageAttempts.isNotEmpty()) {
+            formatListString(decksLowestAverageAttempts)
+        } else {
+            "You have either not played with any deck or not marked a flashcard as a favourite yet."
         }
     }
 

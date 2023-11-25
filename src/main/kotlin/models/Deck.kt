@@ -3,6 +3,7 @@ package models
 import utils.Utilities
 import utils.Utilities.resetColour
 import utils.Utilities.yellowColour
+import java.math.RoundingMode
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import java.time.format.FormatStyle
@@ -24,6 +25,8 @@ data class Deck(
     }
 
     fun numberOfFlashcards() = flashcards.size
+
+    fun numberOfHits() = flashcards.count { flashcard: Flashcard -> flashcard.hit == "Hit" }
 
     fun findFlashcard(id: Int): Flashcard? {
         return flashcards.find { flashcard -> flashcard.flashcardId == id }
@@ -60,28 +63,30 @@ data class Deck(
         }
 
     fun calculateHitsPercentage(): Double? {
-        if (numberOfFlashcards() > 0) {
+        return if (numberOfFlashcards() > 0) {
             val hitsNumber = flashcards.filter { flashcard -> flashcard.hit == "Hit" }.size.toDouble()
-            val percentage: Double = (hitsNumber / flashcards.size.toDouble()) * 100
-            return percentage
-        } else {
-            return null
-        }
+            (hitsNumber / flashcards.size.toDouble()) * 100
+        } else null
     }
+
+    fun calculateDeckAverageAttemptNo(): Double = flashcards.sumOf { flashcard: Flashcard -> flashcard.attempts.toDouble() } / flashcards.size
+
+    fun calculateNoOfFavouriteFlashcards(): Int = flashcards.count { flashcard: Flashcard -> flashcard.favourite }
 
     override fun toString(): String {
         val lastDateAccessedString = if (lastDateAccessed != null) {
-            "| LAST ACCESS: ${lastDateAccessed?.format(
+            " LAST ACCESS: ${lastDateAccessed?.format(
                 DateTimeFormatter.ofLocalizedDate(FormatStyle.SHORT)
-            )}"
+            )}  | HITS: ${numberOfHits()}/${flashcards.size} (${calculateHitsPercentage()}%)  | AVERAGE ATTEMPT NUMBER: ${calculateDeckAverageAttemptNo().toBigDecimal().setScale(2, RoundingMode.HALF_UP)} | FAVOURITES: ${calculateNoOfFavouriteFlashcards()}/${flashcards.size}"
         } else {
-            ""
+            " HAS NOT BEEN PLAYED YET"
         }
 
-        val result =
-            """            $yellowColour-----------------------------------------------------------------------------------------------------------
-            | ID: $deckId     | TITLE: $title     | THEME: $theme     | LEVEL: $level     $lastDateAccessedString 
-            -----------------------------------------------------------------------------------------------------------$resetColour
+        val result: String =
+            """            $yellowColour----------------------------------------------------------------------------------------------------------
+            | ID: $deckId  | TITLE: $title  | THEME: $theme  | LEVEL: $level  
+            |$lastDateAccessedString 
+            ----------------------------------------------------------------------------------------------------------$resetColour
             """.trimIndent()
 
         return result

@@ -93,55 +93,53 @@ fun play() {
         println("Instructions: Either the WORD side of the card will be shown and you have to try to remember its meaning or the MEANING side of the word will be shown and you have to remember the respective WORD.")
         println("The system will ask you if you guessed it correctly or not. There is no need to input anything unless asked.")
 
-        if (chosenDeck != null) {
-            chosenDeck!!.flashcards.forEach { flashcard ->
-
-                println("")
-
-                if (Random.nextBoolean()) {
-                    printFlashcardPlayMode("meaning", flashcard, false)
-                    TimeUnit.SECONDS.sleep(5)
-                    printFlashcardPlayMode("meaning", flashcard, true)
-                } else {
-                    printFlashcardPlayMode("word", flashcard, false)
-                    TimeUnit.SECONDS.sleep(5)
-                    printFlashcardPlayMode("word", flashcard, true)
-                }
-
-                guessedCorrectly = readNextInt("Did you guess it correctly? (1- YES, Any Other Number- NO): ")
-                if (guessedCorrectly == 1) {
-                    flashcard.hit = "Hit"
-                } else {
-                    flashcard.hit = "Missed"
-                }
-
-                flashcard.attempts++
-            }
-            chosenDeck.lastDateAccessed = LocalDate.now()
+        chosenDeck.flashcards.forEach { flashcard ->
 
             println("")
-            println("Your percentage of hits is: $greenColour ${chosenDeck.calculateHitsPercentage()}% $resetColour")
 
-            var markAsFavourite =
-                readNextInt("Would you like to mark one or more words as favourite? (1- YES | Any Other Number- NO): ")
-
-            if (markAsFavourite == 1) {
-                var continueMarking: Int
-                var favouriteId: Int
-
-                do {
-                    favouriteId = readNextInt("Enter the id of the flashcard you want to mark as favourite: ")
-                    if (chosenDeck.findFlashcard(favouriteId) != null && !chosenDeck.findFlashcard(favouriteId)!!.favourite) {
-                        chosenDeck.findFlashcard(favouriteId)!!.favourite = true
-                        println("Flashcard successfully marked as favourite.")
-                    } else {
-                        println("This flashcard is either already marked as favourite or it doesn't exist in this deck.")
-                    }
-
-                    continueMarking =
-                        readNextInt("Would you like to continue marking flashcards as favourites? (1- YES | Any Other Number- NO): ")
-                } while (continueMarking == 1)
+            if (Random.nextBoolean()) {
+                printFlashcardPlayMode("meaning", flashcard, false)
+                TimeUnit.SECONDS.sleep(5)
+                printFlashcardPlayMode("meaning", flashcard, true)
+            } else {
+                printFlashcardPlayMode("word", flashcard, false)
+                TimeUnit.SECONDS.sleep(5)
+                printFlashcardPlayMode("word", flashcard, true)
             }
+
+            guessedCorrectly = readNextInt("Did you guess it correctly? (1- YES, Any Other Number- NO): ")
+            if (guessedCorrectly == 1) {
+                flashcard.hit = "Hit"
+            } else {
+                flashcard.hit = "Missed"
+            }
+
+            flashcard.attempts++
+        }
+        chosenDeck.lastDateAccessed = LocalDate.now()
+
+        println("")
+        println("Your percentage of hits is: $greenColour ${chosenDeck.calculateHitsPercentage()}% $resetColour")
+
+        val markAsFavourite =
+            readNextInt("Would you like to mark one or more words as favourite? (1- YES | Any Other Number- NO): ")
+
+        if (markAsFavourite == 1) {
+            var continueMarking: Int
+            var favouriteId: Int
+
+            do {
+                favouriteId = readNextInt("Enter the id of the flashcard you want to mark as favourite: ")
+                if (chosenDeck.findFlashcard(favouriteId) != null && !chosenDeck.findFlashcard(favouriteId)!!.favourite) {
+                    chosenDeck.findFlashcard(favouriteId)!!.favourite = true
+                    println("Flashcard successfully marked as favourite.")
+                } else {
+                    println("This flashcard is either already marked as favourite or it doesn't exist in this deck.")
+                }
+
+                continueMarking =
+                    readNextInt("Would you like to continue marking flashcards as favourites? (1- YES | Any Other Number- NO): ")
+            } while (continueMarking == 1)
         }
     } else {
         println("There are no decks with flashcards in the system yet. Create decks or populate an existing empty one with flashcards to start playing.")
@@ -199,7 +197,7 @@ fun addDeck() {
 
 fun chooseTheme(): String {
     val chosenTheme = readNextInt("Enter a theme (1-Everyday, 2-Academic, 3-Professional, 4- Cultural and Idiomatic, 5-Emotions and Feelings): ")
-    var deckTheme: String = ""
+    var deckTheme = ""
     when (chosenTheme) {
         1 -> deckTheme = "Everyday"
         2 -> deckTheme = "Academic"
@@ -212,7 +210,7 @@ fun chooseTheme(): String {
 
 fun chooseLevel(): String {
     val chosenLevel = readNextInt("Enter a level (1-Beginner, 2-Intermediate, 3-Advanced, 4- Proficient): ")
-    var deckLevel: String = ""
+    var deckLevel = ""
     when (chosenLevel) {
         1 -> deckLevel = "Beginner"
         2 -> deckLevel = "Intermediate"
@@ -222,67 +220,86 @@ fun chooseLevel(): String {
     return deckLevel
 }
 
-fun listDecks(page: String) {
-    if (deckAPI.numberOfDecks() > 0) {
-        var chosenOption: Int
-        var promptString: String = """
-           ----------------------------------------------
-           |   LIST DECKS                               
-           ----------------------------------------------
-        """.trimIndent()
+fun listDecks(page: String) = if (deckAPI.numberOfDecks() > 0) {
+    var chosenOption: Int
+    var promptString: String = """
+       ----------------------------------------------
+       |   LIST DECKS                               
+       ----------------------------------------------
+    """.trimIndent()
 
-        val listingOptionsEmpty = setOf("All decks", "Empty decks")
-        val listingOptionsNotEmpty = setOf("Decks with flashcards", "Decks by theme", "Decks by level", "Most recently played decks", "Least recently played decks", "Never played decks")
-        val finalListingOptions: MutableSet<String>
+    val listingOptionsEmpty = setOf("All decks", "Empty decks")
+    val listingOptionsNotEmpty = setOf(
+        "Decks with flashcards",
+        "Decks by theme",
+        "Decks by level",
+        "Most recently played decks",
+        "Least recently played decks",
+        "Never played decks",
+        "List decks by number of hits",
+        "List decks by number of misses",
+        "List decks by highest average number of attempts",
+        "List decks by lowest average number of attempts",
+        "List decks by highest number of flashcards marked as favourite"
+    )
 
-        if (page == "alternate") {
-            finalListingOptions = listingOptionsNotEmpty as MutableSet<String>
-        } else {
-            finalListingOptions = listingOptionsEmpty.plus(listingOptionsNotEmpty) as MutableSet<String>
-        }
+    val finalListingOptions: MutableSet<String> = if (page == "alternate") {
+        listingOptionsNotEmpty as MutableSet<String>
+    } else {
+        listingOptionsEmpty.plus(listingOptionsNotEmpty) as MutableSet<String>
+    }
 
-        finalListingOptions.forEachIndexed { index, option: String ->
-            promptString += """
-                
-                | ${index + 1}. $option
-            """.trimIndent()
-        }
-
+    finalListingOptions.forEachIndexed { index, option: String ->
         promptString += """
             
-            ----------------------------------------------
-            ==>> 
+            | ${index + 1}. $option
         """.trimIndent()
-        do {
-            chosenOption = readNextInt(promptString)
-
-            if (page != "alternate") {
-                when (chosenOption) {
-                    1 -> listAllDecks()
-                    2 -> listDecksWithFlashcards()
-                    3 -> listEmptyDecks()
-                    4 -> listDeckByTheme()
-                    5 -> listDeckByLevel()
-                    6 -> listMostRecentlyPlayedDecks()
-                    7 -> listLeastRecentlyPlayedDecks()
-                    8 -> listNeverPlayedDecks()
-                    else -> println("Invalid option entered: $chosenOption")
-                }
-            } else {
-                when (chosenOption) {
-                    1 -> listDecksWithFlashcards()
-                    2 -> listDeckByThemeNotEmpty()
-                    3 -> listDeckByLevelNotEmpty()
-                    4 -> listMostRecentlyPlayedDecks()
-                    5 -> listLeastRecentlyPlayedDecks()
-                    6 -> listNeverPlayedDecks()
-                    else -> println("Invalid option entered: $chosenOption")
-                }
-            }
-        } while (chosenOption !in 1..finalListingOptions.size+1)
-    } else {
-        println("Option Invalid - No decks stored")
     }
+
+    promptString += """
+        
+        ----------------------------------------------
+        ==>> 
+    """.trimIndent()
+    do {
+        chosenOption = readNextInt(promptString)
+
+        if (page != "alternate") {
+            when (chosenOption) {
+                1 -> listAllDecks()
+                2 -> listDecksWithFlashcards()
+                3 -> listEmptyDecks()
+                4 -> listDeckByTheme()
+                5 -> listDeckByLevel()
+                6 -> listMostRecentlyPlayedDecks()
+                7 -> listLeastRecentlyPlayedDecks()
+                8 -> listNeverPlayedDecks()
+                9 -> listDecksByNumberOfHits()
+                10 -> listDecksByNumberOfMisses()
+                11 -> listDecksByHighestAverageAttemptNo()
+                12 -> listDecksByLowestAverageAttemptNo()
+                13 -> listDecksByMostMarkedAsFavourite()
+                else -> println("Invalid option entered: $chosenOption")
+            }
+        } else {
+            when (chosenOption) {
+                1 -> listDecksWithFlashcards()
+                2 -> listDeckByThemeNotEmpty()
+                3 -> listDeckByLevelNotEmpty()
+                4 -> listMostRecentlyPlayedDecks()
+                5 -> listLeastRecentlyPlayedDecks()
+                6 -> listNeverPlayedDecks()
+                7 -> listDecksByNumberOfHits()
+                8 -> listDecksByNumberOfMisses()
+                9 -> listDecksByHighestAverageAttemptNo()
+                10 -> listDecksByLowestAverageAttemptNo()
+                11 -> listDecksByMostMarkedAsFavourite()
+                else -> println("Invalid option entered: $chosenOption")
+            }
+        }
+    } while (chosenOption !in 1..finalListingOptions.size + 1)
+} else {
+    println("Option Invalid - No decks stored")
 }
 
 fun listAllDecks() = println(deckAPI.listAllDecks())
@@ -295,6 +312,11 @@ fun listDeckByLevelNotEmpty() = println(deckAPI.listDecksByLevelNotEmpty(chooseL
 fun listMostRecentlyPlayedDecks() = println(deckAPI.listDecksByMostRecentlyPlayed())
 fun listLeastRecentlyPlayedDecks() = println(deckAPI.listDecksByLeastRecentlyPlayed())
 fun listNeverPlayedDecks() = println(deckAPI.listNeverPlayedDecks())
+fun listDecksByNumberOfHits() = println(deckAPI.listDecksByNumberOfHits())
+fun listDecksByNumberOfMisses() = println(deckAPI.listDecksByNumberOfMisses())
+fun listDecksByHighestAverageAttemptNo() = println(deckAPI.listDecksByHighestAverageAttemptNo())
+fun listDecksByLowestAverageAttemptNo() = println(deckAPI.listDecksByLowestAverageAttemptNo())
+fun listDecksByMostMarkedAsFavourite() = println(deckAPI.listDecksByMostMarkedAsFavourite())
 fun updateDeck() {
     listDecks("all")
     if (deckAPI.numberOfDecks() > 0) {
@@ -341,7 +363,7 @@ fun createFlashcard(): Flashcard {
     val meaning = readNextLine("Enter its meaning: ")
     val typeNo = readNextInt("Enter the word type (1-Noun, 2-Verb, 3-Adjective, 4-Adverb, 5-Expression): ")
 
-    var type: String = ""
+    var type = ""
     when (typeNo) {
         1 -> type = "Noun"
         2 -> type = "Verb"
@@ -432,12 +454,12 @@ private fun askUserToChooseDeck(page: String): Deck? {
 }
 
 private fun askUserToChooseFlashcard(deck: Deck): Flashcard? {
-    if (deck.numberOfFlashcards() > 0) {
+    return if (deck.numberOfFlashcards() > 0) {
         print(deck.listFlashcards())
-        return deck.findFlashcard(readNextInt("\nEnter the id of the flashcard: "))
+        deck.findFlashcard(readNextInt("\nEnter the id of the flashcard: "))
     } else {
         println("No flashcards for chosen deck")
-        return null
+        null
     }
 }
 
