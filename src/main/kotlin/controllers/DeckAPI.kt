@@ -73,7 +73,7 @@ class DeckAPI(serializerType: Serializer) {
         return if (decksWithThemeChosen.isNotEmpty()) {
             formatListString(decksWithThemeChosen)
         } else {
-            "No decks with this theme stored"
+            "No decks with with flashcards with this theme stored"
         }
     }
 
@@ -182,6 +182,7 @@ class DeckAPI(serializerType: Serializer) {
     fun numberOfEmptyDecks(): Int = decks.count { deck: Deck -> deck.flashcards.isEmpty() }
     fun numberOfDecksPlayed(): Int = decks.count { deck: Deck -> deck.lastDateAccessed != null }
     fun numberOfDecksByTheme(theme: String): Int = decks.count { deck: Deck -> deck.theme == theme }
+    fun numberOfDecksByThemeNotEmpty(theme: String): Int = decks.count { deck: Deck -> deck.theme == theme && deck.flashcards.isNotEmpty() }
     fun numberOfDecksByLevelNotEmpty(level: String): Int = decks.count { deck: Deck -> deck.level == level && deck.flashcards.isNotEmpty() }
     fun numberOfDecksByLevel(level: String): Int = decks.count { deck: Deck -> deck.level == level }
 
@@ -192,10 +193,14 @@ class DeckAPI(serializerType: Serializer) {
     // ---------------------------------------------
     fun findDeck(deckId: Int) = decks.find { deck -> deck.deckId == deckId }
 
-    fun searchDecksByTitle(searchString: String) =
-        formatListString(
-            decks.filter { deck -> deck.title.contains(searchString, ignoreCase = true) }
-        )
+    fun searchDecksByTitle(searchString: String): String {
+        val foundDecks = decks.filter { deck -> deck.title.contains(searchString, ignoreCase = true) }
+        if (foundDecks.isNotEmpty()) {
+            return formatListString(foundDecks)
+        } else {
+            return "No decks with the title $searchString were found."
+        }
+    }
 
     /*    fun searchItemByContents(searchString: String): String {
             return if (numberOfNotes() == 0) "No notes stored"

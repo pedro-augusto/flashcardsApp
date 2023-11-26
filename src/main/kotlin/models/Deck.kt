@@ -72,18 +72,18 @@ data class Deck(
     }
 
     fun calculateDeckAverageAttemptNo(): Double? {
-        if (flashcards.isNotEmpty()) {
-            return flashcards.sumOf { flashcard: Flashcard -> flashcard.attempts.toDouble() } / flashcards.size
+        return if (flashcards.isNotEmpty()) {
+            flashcards.sumOf { flashcard: Flashcard -> flashcard.attempts.toDouble() } / flashcards.size
         } else {
-            return null
+            null
         }
     }
 
     fun calculateNoOfFavouriteFlashcards(): Int? {
-        if (flashcards.isNotEmpty()) {
-            return flashcards.count { flashcard: Flashcard -> flashcard.favourite }
+        return if (flashcards.isNotEmpty()) {
+            flashcards.count { flashcard: Flashcard -> flashcard.favourite }
         } else {
-            return null
+            null
         }
     }
 
@@ -98,7 +98,7 @@ data class Deck(
 
         val result: String =
             """            $yellowColour----------------------------------------------------------------------------------------------------------
-            | ID: $deckId  | TITLE: $title  | THEME: $theme  | LEVEL: $level  
+            | ID: $deckId  | TITLE: $title  | THEME: $theme  | LEVEL: $level  | FLASHCARDS: ${flashcards.size}  
             |$lastDateAccessedString 
             ----------------------------------------------------------------------------------------------------------$resetColour
             """.trimIndent()
