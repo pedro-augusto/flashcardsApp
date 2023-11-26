@@ -58,17 +58,6 @@ class DeckTest {
         }
     }
 
-    @Test
-    fun `number of flashcards is correctly calculated for empty and populated decks`() {
-        assertEquals(0, emptyDeck!!.numberOfFlashcards())
-        assertEquals(4, populatedDeck!!.numberOfFlashcards())
-    }
-
-    @Test
-    fun `listFlashcards returns no flashcards added when deck is empty`() {
-        assertTrue(emptyDeck!!.listFlashcards().contains("no flashcards added", true))
-    }
-
     @Nested
     inner class FindFlashcard {
 
@@ -189,13 +178,63 @@ class DeckTest {
         }
     }
 
-    @Test
-    fun `calculatePercentage returns correct percentage when deck is populated`() {
-        assertEquals(50.0, populatedDeck!!.calculateHitsPercentage())
-    }
+    @Nested
+    inner class Calculate {
+        @Test
+        fun `number of flashcards is correctly calculated for empty and populated decks`() {
+            assertEquals(0, emptyDeck!!.numberOfFlashcards())
+            assertEquals(4, populatedDeck!!.numberOfFlashcards())
+        }
 
-    @Test
-    fun `calculatePercentage returns null when deck is empty`() {
-        assertNull(emptyDeck!!.calculateHitsPercentage())
+        @Test
+        fun `listFlashcards returns no flashcards added when deck is empty`() {
+            assertTrue(emptyDeck!!.listFlashcards().contains("no flashcards added", true))
+        }
+
+        @Test
+        fun `calculatePercentage returns correct percentage when deck is populated`() {
+            assertEquals(50.0, populatedDeck!!.calculateHitsPercentage())
+        }
+
+        @Test
+        fun `calculatePercentage returns null when deck is empty`() {
+            assertNull(emptyDeck!!.calculateHitsPercentage())
+        }
+
+        @Test
+        fun `calculateNumberOfHits returns correct number when deck is populated`() {
+            assertEquals(2, populatedDeck!!.numberOfHits())
+        }
+
+        @Test
+        fun `numberOfHits returns null when deck is empty`() {
+            assertEquals(0, emptyDeck!!.numberOfHits())
+        }
+
+        @Test
+        fun `calculateDeckAverageAttemptNo returns correct number when deck is populated`() {
+            populatedDeck!!.findFlashcard(0)!!.attempts = 3
+            populatedDeck!!.findFlashcard(1)!!.attempts = 1
+            populatedDeck!!.findFlashcard(2)!!.attempts = 5
+            populatedDeck!!.findFlashcard(3)!!.attempts = 8
+            assertEquals(4.25, populatedDeck!!.calculateDeckAverageAttemptNo())
+        }
+
+        @Test
+        fun `calculateDeckAverageAttemptNo returns null when deck is empty`() {
+            assertNull(emptyDeck!!.calculateDeckAverageAttemptNo())
+        }
+
+        @Test
+        fun `calculateNoOfFavouriteFlashcards returns correct number when deck is populated`() {
+            assertEquals(2, populatedDeck!!.calculateNoOfFavouriteFlashcards())
+            populatedDeck!!.findFlashcard(1)!!.favourite = true
+            assertEquals(3, populatedDeck!!.calculateNoOfFavouriteFlashcards())
+        }
+
+        @Test
+        fun `calculateNoOfFavouriteFlashcards returns null when deck is empty`() {
+            assertNull(emptyDeck!!.calculateNoOfFavouriteFlashcards())
+        }
     }
 }
