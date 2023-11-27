@@ -42,10 +42,6 @@ tasks.test {
     finalizedBy(tasks.jacocoTestReport)
 }
 
-tasks.withType<KotlinCompile> {
-    kotlinOptions.jvmTarget = "1.8"
-}
-
 tasks.jar {
     manifest.attributes["Main-Class"] = "MainKt"
     // for building a fat jar - include all dependencies
