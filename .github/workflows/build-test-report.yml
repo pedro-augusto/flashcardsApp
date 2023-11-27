@@ -72,6 +72,19 @@ jobs:
 
       - name: Change wrapper permissions
         run: chmod +x ./gradlew
+
+      - name: Checkout code
+        uses: actions/checkout@master
+      - name: Update diagram
+        uses: githubocto/repo-visualizer@0.7.1
+        with:
+          output_file: "diagram.svg"
+          excluded_paths: "dist,node_modules"
+      - name: Get artifact
+        uses: actions/download-artifact@v2
+        with:
+          name: "flashcard-app-diagram"
+          path: "downloads"
       
       # Runs the Gradle dokkaHtml task
       - name: Dokka with Gradle
