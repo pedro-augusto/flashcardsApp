@@ -34,6 +34,10 @@ Unit tests were performed to ensure good test coverage.
 
 Persistence was introduced to the project, allowing data storage and retrieval through three different serialization methods: JSON, YAML, and XML. Despite the availability of three serialization methods, data is now stored and loaded by default using YAML. The user interface displays a message indicating the success or failure of these operations.
 
+### GitHub Actions
+
+This repository has 2 extra actions in addition to the ones worked on in labs during class: one that automatically translates the readme.md to French and another one that automatically creates an SVG diagram of the repository. The automatically generated archives related to the actions described are respectively named README.fr.md and flashcard-app-diagram.svg
+
 ## Project Authors 
 
 Project developed by Pedro Augusto for the Software Development Tools module with aid from the resources made available by Dr. Siobhan Drohan.
