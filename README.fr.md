@@ -17,7 +17,7 @@ Cette application est composée de deux modèles : deck et flashcards. Un deck 
 -   Tous les decks
 -   Ponts vides
 -   Decks avec flashcards
--   Decks by theme (2 functions: one to be used when the user has to select a deck to play listing only populated decks and another function listing including empty decks too)
+-   Decks par thème (2 fonctions : une à utiliser lorsque l'utilisateur doit sélectionner un deck à jouer répertoriant uniquement les decks remplis et une autre fonction listant également les decks vides)
 -   Decks par niveau (2 fonctions : une à utiliser lorsque l'utilisateur doit sélectionner un deck pour jouer en répertoriant uniquement les decks remplis et une autre fonction listant également les decks vides)
 -   Decks joués le plus récemment
 -   Decks les moins récemment joués
@@ -33,6 +33,10 @@ Des tests unitaires ont été effectués pour garantir une bonne couverture des 
 ### Persistance
 
 La persistance a été introduite dans le projet, permettant le stockage et la récupération de données via trois méthodes de sérialisation différentes : JSON, YAML et XML. Malgré la disponibilité de trois méthodes de sérialisation, les données sont désormais stockées et chargées par défaut à l'aide de YAML. L'interface utilisateur affiche un message indiquant la réussite ou l'échec de ces opérations.
+
+### Actions GitHub
+
+Ce référentiel comporte 2 actions supplémentaires en plus de celles travaillées dans les laboratoires pendant les cours : une qui traduit automatiquement le fichier readme.md en français et une autre qui crée automatiquement un diagramme SVG du référentiel. Les archives générées automatiquement liées aux actions décrites sont respectivement nommées README.fr.md et flashcard-app-diagram.svg
 
 ## Auteurs du projet
 
