@@ -73,16 +73,6 @@ jobs:
       - name: Change wrapper permissions
         run: chmod +x ./gradlew
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v1
-        with:
-          node-version: 12.x
-          
-      - name: Adding README - French
-        uses: dephraiim/translate-readme@main
-        with:
-          LANG: fr
-
       - name: Checkout code
         uses: actions/checkout@master
       - name: Update diagram
@@ -105,4 +95,24 @@ jobs:
           name: KDoc Documentation Site
           path: build/dokka/html
 
+  translate_markdown:
+    runs-on: ubuntu-latest
+    needs: documentation
+    steps:
+       # Fetch changes from the remote repository
+      - name: Fetch changes
+        run: git fetch origin master
+
+      - name: Pull changes
+        run: git pull
+    
+      - uses: actions/checkout@v2
+      - name: Setup Node.js
+        uses: actions/setup-node@v1
+        with:
+          node-version: 12.x
+      - name: Adding README - French
+        uses: dephraiim/translate-readme@main
+        with:
+          LANG: fr
     
