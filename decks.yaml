@@ -13,8 +13,8 @@
     meaning: "Hello"
     typeOfWord: "Expression"
     hit: "Hit"
-    attempts: 1
-    favourite: false
+    attempts: 2
+    favourite: true
   - flashcardId: 4
     word: "Non"
     meaning: "No"

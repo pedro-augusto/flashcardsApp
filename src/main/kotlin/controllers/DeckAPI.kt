@@ -1,6 +1,7 @@
 package controllers
 
 import models.Deck
+import models.Flashcard
 import persistence.Serializer
 import utils.Utilities.formatListString
 import java.util.ArrayList
@@ -185,8 +186,11 @@ class DeckAPI(serializerType: Serializer) {
     fun numberOfDecksByThemeNotEmpty(theme: String): Int = decks.count { deck: Deck -> deck.theme == theme && deck.flashcards.isNotEmpty() }
     fun numberOfDecksByLevelNotEmpty(level: String): Int = decks.count { deck: Deck -> deck.level == level && deck.flashcards.isNotEmpty() }
     fun numberOfDecksByLevel(level: String): Int = decks.count { deck: Deck -> deck.level == level }
-
     fun numberOfDecksNeverPlayed(): Int = decks.count { deck: Deck -> deck.flashcards.isNotEmpty() && deck.lastDateAccessed == null }
+    fun calculateOverallNumberOfMisses(): Int = decks.sumOf { deck: Deck -> deck.numberOfMisses() }
+    fun calculateOverallNumberOfHits(): Int = decks.sumOf { deck: Deck -> deck.numberOfHits() }
+    fun calculateOverallNumberOfFlashcards(): Int = decks.sumOf { deck: Deck -> deck.numberOfFlashcards() }
+    fun calculateOverallNumberOfFavourites(): Int = decks.sumOf { deck: Deck -> deck.numberOfFavourites() }
 
     // ----------------------------------------------
     //  SEARCHING METHODS
@@ -200,6 +204,26 @@ class DeckAPI(serializerType: Serializer) {
         } else {
             return "No decks with the title $searchString were found."
         }
+    }
+
+    fun generateSetOfFlashcard(option: String, numberOfFlashcardsChosen: Int): MutableSet<Flashcard> {
+        var result: MutableSet<Flashcard> = mutableSetOf()
+        var all: Set<Flashcard> = setOf()
+        var randomIndex: Int
+
+        when (option) {
+            "Miss" -> all = decks.flatMap { deck: Deck -> deck.getMisses() }.toSet()
+            "Hit" -> all = decks.flatMap { deck: Deck -> deck.getHits() }.toSet()
+            "Random" -> all = decks.flatMap { deck: Deck -> deck.flashcards }.toSet()
+            "Favourite" -> all = decks.flatMap { deck: Deck -> deck.getFavourites() }.toSet()
+        }
+
+        do {
+            randomIndex = (0..all.size).random()
+            result.add(all.elementAt(randomIndex))
+        } while (result.distinct().size != numberOfFlashcardsChosen)
+
+        return result
     }
 
     /*    fun searchItemByContents(searchString: String): String {
