@@ -11,6 +11,7 @@ import java.io.File
 import java.time.LocalDate
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
+import kotlin.test.assertNull
 import kotlin.test.assertTrue
 
 class DeckAPITest {
@@ -91,19 +92,19 @@ class DeckAPITest {
     inner class CountingMethods {
 
         @Test
-        fun numberOfNotesCalculatedCorrectly() {
+        fun `numberOfDecks returns correct value`() {
             assertEquals(5, populatedArray!!.numberOfDecks())
             assertEquals(0, emptyArray!!.numberOfDecks())
         }
 
         @Test
-        fun numberOfDecksWithFlashcardsCalculatedCorrectly() {
+        fun `numberOfDecksWithFlashcards returns correct value`() {
             assertEquals(3, populatedArray!!.numberOfDecksWithFlashcards())
             assertEquals(0, emptyArray!!.numberOfDecksWithFlashcards())
         }
 
         @Test
-        fun numberOfEmptyDecksCalculatedCorrectly() {
+        fun `numberOfEmptyDecks returns correct value`() {
             assertEquals(2, populatedArray!!.numberOfEmptyDecks())
             assertEquals(0, emptyArray!!.numberOfEmptyDecks())
         }
@@ -647,6 +648,46 @@ class DeckAPITest {
             assertTrue(emptyArray!!.searchDecksByTitle("Trip and Adventure").contains("No decks with the title", true))
             assertTrue(emptyArray!!.searchDecksByTitle("Missed Opportunities").contains("No decks with the title", true))
             assertTrue(emptyArray!!.searchDecksByTitle("School Vocabulary").contains("No decks with the title", true))
+        }
+    }
+
+    @Nested
+    inner class Generate {
+
+        @Test
+        fun `generateSetOfFlashcard returns set of flashcards with the correct type when populated`() {
+            assertEquals(5, populatedArray!!.calculateOverallNumberOfMisses())
+            val miss = populatedArray!!.generateSetOfFlashcard("Miss", 4)
+            assertEquals(4, miss!!.distinct().count())
+            assertEquals("Miss", miss.elementAt(0).hit)
+            assertEquals("Miss", miss.elementAt(1).hit)
+            assertEquals("Miss", miss.elementAt(2).hit)
+            assertEquals("Miss", miss.elementAt(3).hit)
+
+            assertEquals(3, populatedArray!!.calculateOverallNumberOfHits())
+            val hit = populatedArray!!.generateSetOfFlashcard("Hit", 2)
+            assertEquals(2, hit!!.distinct().count())
+            assertEquals("Hit", hit.elementAt(0).hit)
+            assertEquals("Hit", hit.elementAt(1).hit)
+
+            assertEquals(4, populatedArray!!.calculateOverallNumberOfFavourites())
+            val favourite = populatedArray!!.generateSetOfFlashcard("Favourite", 3)
+            assertEquals(3, favourite!!.distinct().count())
+            assertTrue(favourite.elementAt(0).favourite)
+            assertTrue(favourite.elementAt(1).favourite)
+            assertTrue(favourite.elementAt(2).favourite)
+
+            assertEquals(13, populatedArray!!.calculateOverallNumberOfFlashcards())
+            val random = populatedArray!!.generateSetOfFlashcard("Random", 5)
+            assertEquals(5, random!!.distinct().count())
+        }
+
+        @Test
+        fun `generateSetOfFlashcard returns null when array is empty`() {
+            assertNull(emptyArray!!.generateSetOfFlashcard("Miss", 4))
+            assertNull(emptyArray!!.generateSetOfFlashcard("Hit", 4))
+            assertNull(emptyArray!!.generateSetOfFlashcard("Favourite", 4))
+            assertNull(emptyArray!!.generateSetOfFlashcard("Random", 4))
         }
     }
 }

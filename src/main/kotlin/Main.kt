@@ -5,6 +5,7 @@ import persistence.YAMLSerializer
 import utils.ScannerInput.readNextInt
 import utils.ScannerInput.readNextLine
 import utils.Utilities.greenColour
+import utils.Utilities.readValidInput
 import utils.Utilities.redColour
 import utils.Utilities.resetColour
 import utils.Utilities.yellowColour
@@ -93,6 +94,9 @@ fun play() {
             } while (chosenDeck!!.flashcards.isEmpty())
         } else {
             chosenDeck = generateDeck(askUserToChooseGenerateOption())
+            if (chosenDeck.flashcards.isEmpty()) {
+                return
+            }
         }
 
         println("")
@@ -209,8 +213,7 @@ fun addDeck() {
 }
 
 fun chooseTheme(): String {
-    // TODO: error proof
-    val chosenTheme = readNextInt("Enter a theme (1-Everyday, 2-Academic, 3-Professional, 4- Cultural and Idiomatic, 5-Emotions and Feelings): ")
+    val chosenTheme = readValidInput("theme", "Enter a theme (1-Everyday, 2-Academic, 3-Professional, 4- Cultural and Idiomatic, 5-Emotions and Feelings): ")
     var deckTheme = ""
     when (chosenTheme) {
         1 -> deckTheme = "Everyday"
@@ -223,8 +226,7 @@ fun chooseTheme(): String {
 }
 
 fun chooseLevel(): String {
-    // TODO: error proof
-    val chosenLevel = readNextInt("Enter a level (1-Beginner, 2-Intermediate, 3-Advanced, 4- Proficient): ")
+    val chosenLevel = readValidInput("level", "Enter a level (1-Beginner, 2-Intermediate, 3-Advanced, 4- Proficient): ")
     var deckLevel = ""
     when (chosenLevel) {
         1 -> deckLevel = "Beginner"
@@ -243,7 +245,7 @@ fun listDecks(page: String) = if (deckAPI.numberOfDecks() > 0) {
        ----------------------------------------------
     """.trimIndent()
 
-    val listingOptionsEmpty = setOf("All decks", "Empty decks")
+    val listingOptionsEmpty: Set<String> = setOf("All decks", "Empty decks")
     val listingOptionsNotEmpty = setOf(
         "Decks with flashcards",
         "Decks by theme",
@@ -258,11 +260,10 @@ fun listDecks(page: String) = if (deckAPI.numberOfDecks() > 0) {
         "List decks by highest number of flashcards marked as favourite"
     )
 
-    val finalListingOptions: MutableSet<String>
-    if (page == "excludeEmpty") {
-        finalListingOptions = listingOptionsNotEmpty as MutableSet<String>
+    val finalListingOptions: MutableSet<String> = if (page == "excludeEmpty") {
+        listingOptionsNotEmpty as MutableSet<String>
     } else { // all
-        finalListingOptions = listingOptionsEmpty.plus(listingOptionsNotEmpty) as MutableSet<String>
+        listingOptionsEmpty.plus(listingOptionsNotEmpty) as MutableSet<String>
     }
 
     finalListingOptions.forEachIndexed { index, option: String ->
@@ -283,8 +284,8 @@ fun listDecks(page: String) = if (deckAPI.numberOfDecks() > 0) {
         if (page == "all") {
             when (chosenOption) {
                 1 -> listAllDecks()
-                2 -> listDecksWithFlashcards()
-                3 -> listEmptyDecks()
+                2 -> listEmptyDecks()
+                3 -> listDecksWithFlashcards()
                 4 -> listDeckByTheme()
                 5 -> listDeckByLevel()
                 6 -> listMostRecentlyPlayedDecks()
@@ -335,16 +336,15 @@ fun listDecksByLowestAverageAttemptNo() = println(deckAPI.listDecksByLowestAvera
 fun listDecksByMostMarkedAsFavourite() = println(deckAPI.listDecksByMostMarkedAsFavourite())
 
 fun generateDeck(option: String): Deck {
-    val maxNoFlashcards: Int
     var numberOfFlashcardsChosen: Int
-    var finalDeck = Deck(title = "Generated Deck ($option) in ${LocalDate.now().format(DateTimeFormatter.ofPattern("dd/MM/yyyy"))}", theme = "Generated", level = "Generated")
+    val finalDeck = Deck(title = "Generated Deck ($option) in ${LocalDate.now().format(DateTimeFormatter.ofPattern("dd/MM/yyyy"))}", theme = "Generated", level = "Generated")
 
-    when (option) {
-        "Miss" -> maxNoFlashcards = deckAPI.calculateOverallNumberOfMisses()
-        "Hit" -> maxNoFlashcards = deckAPI.calculateOverallNumberOfHits()
-        "Random" -> maxNoFlashcards = deckAPI.calculateOverallNumberOfFlashcards()
-        "Favourite" -> maxNoFlashcards = deckAPI.calculateOverallNumberOfFavourites()
-        else -> maxNoFlashcards = 0
+    val maxNoFlashcards: Int = when (option) {
+        "Miss" -> deckAPI.calculateOverallNumberOfMisses()
+        "Hit" -> deckAPI.calculateOverallNumberOfHits()
+        "Random" -> deckAPI.calculateOverallNumberOfFlashcards()
+        "Favourite" -> deckAPI.calculateOverallNumberOfFavourites()
+        else -> 0
     }
 
     if (maxNoFlashcards > 0) {
@@ -353,7 +353,11 @@ fun generateDeck(option: String): Deck {
         } while (numberOfFlashcardsChosen > maxNoFlashcards)
 
         val flashcards = deckAPI.generateSetOfFlashcard(option, numberOfFlashcardsChosen)
-        finalDeck.flashcards = flashcards
+        if (flashcards == null) {
+            println("There was an error and it was not possible to generate your personalised deck.")
+        } else {
+            finalDeck.flashcards = flashcards
+        }
     } else {
         println("You do not have cards marked as '$option'.")
     }
@@ -404,7 +408,7 @@ fun deleteDeck() {
 fun createFlashcard(): Flashcard {
     val word = readNextLine("Enter the word/expression: ")
     val meaning = readNextLine("Enter its meaning: ")
-    val typeNo = readNextInt("Enter the word type (1-Noun, 2-Verb, 3-Adjective, 4-Adverb, 5-Expression): ")
+    val typeNo = readValidInput("type of word", "Enter the word type (1-Noun, 2-Verb, 3-Adjective, 4-Adverb, 5-Expression): ")
 
     var type = ""
     when (typeNo) {
@@ -493,12 +497,11 @@ private fun askUserToChooseDeck(page: String): Deck? {
             println("Deck id is not valid")
         }
     }
-    return null // selected note is not active
+    return null
 }
 
 private fun askUserToChooseGenerateOption(): String {
-    // TODO: error proof
-    val chosenOption = readNextInt("Play generated deck with (1-Flashcards that were 'Miss' | 2-Flashcards that were 'Hit' | 3-Favourite Flashcards | 4-Random Flashcards): ")
+    val chosenOption = readValidInput("option for generating a deck", "Play generated deck with (1-Flashcards that were 'Miss' | 2-Flashcards that were 'Hit' | 3-Favourite Flashcards | 4-Random Flashcards): ")
     var option = ""
     when (chosenOption) {
         1 -> option = "Miss"
