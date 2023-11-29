@@ -3,46 +3,46 @@
   title: "Greetings and Basics"
   theme: "Everyday"
   lastDateAccessed:
-  - 2023
-  - 11
-  - 25
+    - 2023
+    - 11
+    - 25
   level: "Beginner"
   flashcards:
-  - flashcardId: 0
-    word: "Bonjour"
-    meaning: "Hello"
-    typeOfWord: "Expression"
-    hit: "Hit"
-    attempts: 2
-    favourite: true
-  - flashcardId: 4
-    word: "Non"
-    meaning: "No"
-    typeOfWord: "Expression"
-    hit: "Missed"
-    attempts: 1
-    favourite: false
-  - flashcardId: 2
-    word: "Excusez-moi"
-    meaning: "Excuse me"
-    typeOfWord: "Expression"
-    hit: "Hit"
-    attempts: 1
-    favourite: false
-  - flashcardId: 3
-    word: "Oui"
-    meaning: "Yes"
-    typeOfWord: "Expression"
-    hit: "Hit"
-    attempts: 1
-    favourite: false
-  - flashcardId: 1
-    word: "Merci"
-    meaning: "Thank you"
-    typeOfWord: "Expression"
-    hit: "Missed"
-    attempts: 1
-    favourite: false
+    - flashcardId: 0
+      word: "Bonjour"
+      meaning: "Hello"
+      typeOfWord: "Expression"
+      hit: "Hit"
+      attempts: 2
+      favourite: true
+    - flashcardId: 1
+      word: "Non"
+      meaning: "No"
+      typeOfWord: "Expression"
+      hit: "Missed"
+      attempts: 4
+      favourite: false
+    - flashcardId: 2
+      word: "Excusez-moi"
+      meaning: "Excuse me"
+      typeOfWord: "Expression"
+      hit: "Hit"
+      attempts: 1
+      favourite: false
+    - flashcardId: 3
+      word: "Oui"
+      meaning: "Yes"
+      typeOfWord: "Expression"
+      hit: "Hit"
+      attempts: 2
+      favourite: false
+    - flashcardId: 4
+      word: "Merci"
+      meaning: "Thank you"
+      typeOfWord: "Expression"
+      hit: "Missed"
+      attempts: 1
+      favourite: false
 - deckId: 1
   title: "Travel"
   theme: "Everyday"
@@ -52,41 +52,41 @@
     - 23
   level: "Beginner"
   flashcards:
-  - flashcardId: 4
-    word: "Plage"
-    meaning: "Beach"
-    typeOfWord: "Noun"
-    hit: "Not Attempted"
-    attempts: 0
-    favourite: false
-  - flashcardId: 0
-    word: "Aéroport"
-    meaning: "Airport"
-    typeOfWord: "Noun"
-    hit: "Not Attempted"
-    attempts: 0
-    favourite: false
-  - flashcardId: 2
-    word: "Train"
-    meaning: "Train"
-    typeOfWord: "Noun"
-    hit: "Not Attempted"
-    attempts: 0
-    favourite: false
-  - flashcardId: 1
-    word: "Hôtel"
-    meaning: "Hotel"
-    typeOfWord: "Noun"
-    hit: "Not Attempted"
-    attempts: 0
-    favourite: false
-  - flashcardId: 3
-    word: "Voiture"
-    meaning: "Car"
-    typeOfWord: "Noun"
-    hit: "Not Attempted"
-    attempts: 0
-    favourite: false
+    - flashcardId: 0
+      word: "Plage"
+      meaning: "Beach"
+      typeOfWord: "Noun"
+      hit: "Hit"
+      attempts: 5
+      favourite: true
+    - flashcardId: 1
+      word: "Aéroport"
+      meaning: "Airport"
+      typeOfWord: "Noun"
+      hit: "Hit"
+      attempts: 2
+      favourite: false
+    - flashcardId: 2
+      word: "Train"
+      meaning: "Train"
+      typeOfWord: "Noun"
+      hit: "Hit"
+      attempts: 2
+      favourite: false
+    - flashcardId: 3
+      word: "Hôtel"
+      meaning: "Hotel"
+      typeOfWord: "Noun"
+      hit: "Hit"
+      attempts: 1
+      favourite: false
+    - flashcardId: 4
+      word: "Voiture"
+      meaning: "Car"
+      typeOfWord: "Noun"
+      hit: "Miss"
+      attempts: 3
+      favourite: false
 - deckId: 2
   title: "Business Basics"
   theme: "Professional"
@@ -96,106 +96,103 @@
     - 24
   level: "Beginner"
   flashcards:
-  - flashcardId: 5
-    word: "Réseau"
-    meaning: "Network"
-    typeOfWord: "Noun"
-    hit: "Not Attempted"
-    attempts: 0
-    favourite: false
-  - flashcardId: 0
-    word: "Réunion"
-    meaning: "Meeting"
-    typeOfWord: "Noun"
-    hit: "Not Attempted"
-    attempts: 0
-    favourite: false
-  - flashcardId: 4
-    word: "Stratégie"
-    meaning: "Strategy"
-    typeOfWord: "Noun"
-    hit: "Not Attempted"
-    attempts: 0
-    favourite: false
-  - flashcardId: 2
-    word: "Collaboration"
-    meaning: "Collaboration"
-    typeOfWord: "Noun"
-    hit: "Not Attempted"
-    attempts: 0
-    favourite: false
-  - flashcardId: 3
-    word: "Projet"
-    meaning: "Project"
-    typeOfWord: "Noun"
-    hit: "Not Attempted"
-    attempts: 0
-    favourite: false
-  - flashcardId: 1
-    word: "Présentation"
-    meaning: "Presentation"
-    typeOfWord: "Noun"
-    hit: "Not Attempted"
-    attempts: 0
-    favourite: true
+    - flashcardId: 0
+      word: "Réseau"
+      meaning: "Network"
+      typeOfWord: "Noun"
+      hit: "Miss"
+      attempts: 3
+      favourite: true
+    - flashcardId: 1
+      word: "Réunion"
+      meaning: "Meeting"
+      typeOfWord: "Noun"
+      hit: "Hit"
+      attempts: 3
+      favourite: false
+    - flashcardId: 2
+      word: "Stratégie"
+      meaning: "Strategy"
+      typeOfWord: "Noun"
+      hit: "Hit"
+      attempts: 1
+      favourite: false
+    - flashcardId: 3
+      word: "Collaboration"
+      meaning: "Collaboration"
+      typeOfWord: "Noun"
+      hit: "Hit"
+      attempts: 4
+      favourite: false
+    - flashcardId: 4
+      word: "Projet"
+      meaning: "Project"
+      typeOfWord: "Noun"
+      hit: "Hit"
+      attempts: 4
+      favourite: false
+    - flashcardId: 5
+      word: "Présentation"
+      meaning: "Presentation"
+      typeOfWord: "Noun"
+      hit: "Hit"
+      attempts: 3
+      favourite: true
 - deckId: 3
   title: "French Cuisine"
   theme: "Cultural and Idiomatic"
-  lastDateAccessed:
-    - 2023
-    - 1
-    - 22
+  lastDateAccessed: null
   level: "Intermediate"
   flashcards:
-  - flashcardId: 3
-    word: "Crêpe"
-    meaning: "Crepe"
-    typeOfWord: "Noun"
-    hit: "Not Attempted"
-    attempts: 0
-    favourite: false
-  - flashcardId: 0
-    word: "Baguette"
-    meaning: "Baguette"
-    typeOfWord: "Noun"
-    hit: "Not Attempted"
-    attempts: 0
-    favourite: false
-  - flashcardId: 1
-    word: "Fromage"
-    meaning: "Cheese"
-    typeOfWord: "Noun"
-    hit: "Not Attempted"
-    attempts: 0
-    favourite: false
-  - flashcardId: 5
-    word: "Escargot"
-    meaning: "Snail"
-    typeOfWord: "Noun"
-    hit: "Not Attempted"
-    attempts: 0
-    favourite: false
-  - flashcardId: 2
-    word: "Croissant"
-    meaning: "Croissant"
-    typeOfWord: "Noun"
-    hit: "Not Attempted"
-    attempts: 0
-    favourite: false
-  - flashcardId: 4
-    word: "Vin"
-    meaning: "Wine"
-    typeOfWord: "Noun"
-    hit: "Not Attempted"
-    attempts: 0
-    favourite: true
-  - flashcardId: 6
-    word: "Café"
-    meaning: "Coffee"
-    typeOfWord: "Noun"
-    hit: "Not Attempted"
-    attempts: 0
-    favourite: true
+    - flashcardId: 0
+      word: "Crêpe"
+      meaning: "Crepe"
+      typeOfWord: "Noun"
+      hit: "Not Attempted"
+      attempts: 0
+      favourite: false
+    - flashcardId: 1
+      word: "Baguette"
+      meaning: "Baguette"
+      typeOfWord: "Noun"
+      hit: "Not Attempted"
+      attempts: 0
+      favourite: false
+    - flashcardId: 2
+      word: "Fromage"
+      meaning: "Cheese"
+      typeOfWord: "Noun"
+      hit: "Not Attempted"
+      attempts: 0
+      favourite: false
+    - flashcardId: 3
+      word: "Escargot"
+      meaning: "Snail"
+      typeOfWord: "Noun"
+      hit: "Not Attempted"
+      attempts: 0
+      favourite: false
+    - flashcardId: 4
+      word: "Croissant"
+      meaning: "Croissant"
+      typeOfWord: "Noun"
+      hit: "Not Attempted"
+      attempts: 0
+      favourite: false
+    - flashcardId: 5
+      word: "Vin"
+      meaning: "Wine"
+      typeOfWord: "Noun"
+      hit: "Not Attempted"
+      attempts: 0
+      favourite: false
+    - flashcardId: 6
+      word: "Café"
+      meaning: "Coffee"
+      typeOfWord: "Noun"
+      hit: "Not Attempted"
+      attempts: 0
+      favourite: false
 - deckId: 4
   title: "Science"
   theme: "Academic"
@@ -205,141 +202,138 @@
     - 25
   level: "Advanced"
   flashcards:
-  - flashcardId: 0
-    word: "Hypothèse"
-    meaning: "Hypothesis"
-    typeOfWord: "Noun"
-    hit: "Hit"
-    attempts: 0
-    favourite: false
-  - flashcardId: 4
-    word: "Expérimentation"
-    meaning: "Experimentation"
-    typeOfWord: "Noun"
-    hit: "Not Attempted"
-    attempts: 0
-    favourite: true
-  - flashcardId: 4
-    word: "Phénomène"
-    meaning: "Phenomenon"
-    typeOfWord: "Noun"
-    hit: "Hit"
-    attempts: 0
-    favourite: true
-  - flashcardId: 1
-    word: "Théorie"
-    meaning: "Theory"
-    typeOfWord: "Noun"
-    hit: "Not Attempted"
-    attempts: 0
-    favourite: false
-  - flashcardId: 5
-    word: "Thèse"
-    meaning: "Thesis"
-    typeOfWord: "Noun"
-    hit: "Not Attempted"
-    attempts: 0
-    favourite: false
-  - flashcardId: 3
-    word: "Analyse"
-    meaning: "Analysis"
-    typeOfWord: "Noun"
-    hit: "Hit"
-    attempts: 0
-    favourite: false
+    - flashcardId: 0
+      word: "Hypothèse"
+      meaning: "Hypothesis"
+      typeOfWord: "Noun"
+      hit: "Hit"
+      attempts: 3
+      favourite: false
+    - flashcardId: 1
+      word: "Expérimentation"
+      meaning: "Experimentation"
+      typeOfWord: "Noun"
+      hit: "Not Attempted"
+      attempts: 1
+      favourite: false
+    - flashcardId: 2
+      word: "Phénomène"
+      meaning: "Phenomenon"
+      typeOfWord: "Noun"
+      hit: "Hit"
+      attempts: 4
+      favourite: true
+    - flashcardId: 3
+      word: "Théorie"
+      meaning: "Theory"
+      typeOfWord: "Noun"
+      hit: "Hit"
+      attempts: 3
+      favourite: false
+    - flashcardId: 4
+      word: "Thèse"
+      meaning: "Thesis"
+      typeOfWord: "Noun"
+      hit: "Hit"
+      attempts: 2
+      favourite: false
+    - flashcardId: 5
+      word: "Analyse"
+      meaning: "Analysis"
+      typeOfWord: "Noun"
+      hit: "Hit"
+      attempts: 3
+      favourite: false
 - deckId: 5
   title: "Daily Verbs"
   theme: "Everyday"
-  lastDateAccessed:
-    - 2023
-    - 2
-    - 1
+  lastDateAccessed: null
   level: "Beginner"
   flashcards:
-  - flashcardId: 2
-    word: "Faire du sport"
-    meaning: "To do sports"
-    typeOfWord: "Verb"
-    hit: "Not Attempted"
-    attempts: 0
-    favourite: false
-  - flashcardId: 6
-    word: "Voyager"
-    meaning: "To travel"
-    typeOfWord: "Verb"
-    hit: "Not Attempted"
-    attempts: 0
-    favourite: false
-  - flashcardId: 8
-    word: "Jouer d'un instrument"
-    meaning: "To play an instrument"
-    typeOfWord: "Verb"
-    hit: "Not Attempted"
-    attempts: 0
-    favourite: true
-  - flashcardId: 4
-    word: "Dormir"
-    meaning: "To sleep"
-    typeOfWord: "Verb"
-    hit: "Not Attempted"
-    attempts: 0
-    favourite: true
-  - flashcardId: 9
-    word: "Sortir avec des amis"
-    meaning: "To go out with friends"
-    typeOfWord: "Verb"
-    hit: "Not Attempted"
-    attempts: 0
-    favourite: true
-  - flashcardId: 10
-    word: "Faire du shopping"
-    meaning: "To go shopping"
-    typeOfWord: "Verb"
-    hit: "Not Attempted"
-    attempts: 0
-    favourite: false
-  - flashcardId: 1
-    word: "Écouter de la musique"
-    meaning: "To listen to music"
-    typeOfWord: "Verb"
-    hit: "Not Attempted"
-    attempts: 0
-    favourite: false
-  - flashcardId: 3
-    word: "Cusiner"
-    meaning: "To cook"
-    typeOfWord: "Verb"
-    hit: "Not Attempted"
-    attempts: 0
-    favourite: false
-  - flashcardId: 5
-    word: "Regarder un film"
-    meaning: "To watch a movie"
-    typeOfWord: "Verb"
-    hit: "Not Attempted"
-    attempts: 0
-    favourite: false
-  - flashcardId: 7
-    word: "Étudier"
-    meaning: "To study"
-    typeOfWord: "Verb"
-    hit: "Not Attempted"
-    attempts: 0
-    favourite: false
-  - flashcardId: 11
-    word: "Travailler"
-    meaning: "To work"
-    typeOfWord: "Verb"
-    hit: "Not Attempted"
-    attempts: 1
-    favourite: false
-  - flashcardId: 0
-    word: "Lire"
-    meaning: "To read"
-    typeOfWord: "Verb"
-    hit: "Not Attempted"
-    attempts: 0
-    favourite: false
+    - flashcardId: 0
+      word: "Faire du sport"
+      meaning: "To do sports"
+      typeOfWord: "Verb"
+      hit: "Not Attempted"
+      attempts: 0
+      favourite: false
+    - flashcardId: 1
+      word: "Voyager"
+      meaning: "To travel"
+      typeOfWord: "Verb"
+      hit: "Not Attempted"
+      attempts: 0
+      favourite: false
+    - flashcardId: 2
+      word: "Jouer d'un instrument"
+      meaning: "To play an instrument"
+      typeOfWord: "Verb"
+      hit: "Not Attempted"
+      attempts: 0
+      favourite: false
+    - flashcardId: 3
+      word: "Dormir"
+      meaning: "To sleep"
+      typeOfWord: "Verb"
+      hit: "Not Attempted"
+      attempts: 0
+      favourite: false
+    - flashcardId: 4
+      word: "Sortir avec des amis"
+      meaning: "To go out with friends"
+      typeOfWord: "Verb"
+      hit: "Not Attempted"
+      attempts: 0
+      favourite: false
+    - flashcardId: 5
+      word: "Faire du shopping"
+      meaning: "To go shopping"
+      typeOfWord: "Verb"
+      hit: "Not Attempted"
+      attempts: 0
+      favourite: false
+    - flashcardId: 6
+      word: "Écouter de la musique"
+      meaning: "To listen to music"
+      typeOfWord: "Verb"
+      hit: "Not Attempted"
+      attempts: 0
+      favourite: false
+    - flashcardId: 7
+      word: "Cusiner"
+      meaning: "To cook"
+      typeOfWord: "Verb"
+      hit: "Not Attempted"
+      attempts: 0
+      favourite: false
+    - flashcardId: 8
+      word: "Regarder un film"
+      meaning: "To watch a movie"
+      typeOfWord: "Verb"
+      hit: "Not Attempted"
+      attempts: 0
+      favourite: false
+    - flashcardId: 9
+      word: "Étudier"
+      meaning: "To study"
+      typeOfWord: "Verb"
+      hit: "Not Attempted"
+      attempts: 0
+      favourite: false
+    - flashcardId: 10
+      word: "Travailler"
+      meaning: "To work"
+      typeOfWord: "Verb"
+      hit: "Not Attempted"
+      attempts: 0
+      favourite: false
+    - flashcardId: 11
+      word: "Lire"
+      meaning: "To read"
+      typeOfWord: "Verb"
+      hit: "Not Attempted"
+      attempts: 0
+      favourite: false
 - deckId: 6
   title: "Nature"
   theme: "Everyday"
@@ -349,80 +343,80 @@
     - 23
   level: "Intermediate"
   flashcards:
-  - flashcardId: 4
-    word: "Animaux Sauvages"
-    meaning: "Wild animals "
-    typeOfWord: "Noun"
-    hit: "Hit"
-    attempts: 1
-    favourite: true
-  - flashcardId: 2
-    word: "Océan"
-    meaning: "Ocean"
-    typeOfWord: "Noun"
-    hit: "Hit"
-    attempts: 1
-    favourite: true
-  - flashcardId: 0
-    word: "Forêt"
-    meaning: "Forest"
-    typeOfWord: "Noun"
-    hit: "Hit"
-    attempts: 1
-    favourite: true
-  - flashcardId: 7
-    word: "Coucher de soleil"
-    meaning: "Sunset"
-    typeOfWord: "Noun"
-    hit: "Hit"
-    attempts: 1
-    favourite: true
-  - flashcardId: 10
-    word: "Biodiversité"
-    meaning: "Biodiversity"
-    typeOfWord: "Noun"
-    hit: "Hit"
-    attempts: 1
-    favourite: true
-  - flashcardId: 6
-    word: "Rivière"
-    meaning: "River"
-    typeOfWord: "Noun"
-    hit: "Hit"
-    attempts: 1
-    favourite: true
-  - flashcardId: 3
-    word: "Fleur"
-    meaning: "Flower"
-    typeOfWord: "Noun"
-    hit: "Hit"
-    attempts: 1
-    favourite: true
-  - flashcardId: 8
-    word: "Écologie"
-    meaning: "Ecology"
-    typeOfWord: "Noun"
-    hit: "Hit"
-    attempts: 1
-    favourite: true
-  - flashcardId: 5
-    word: "Étoiles"
-    meaning: "Stars"
-    typeOfWord: "Noun"
-    hit: "Hit"
-    attempts: 1
-    favourite: true
-  - flashcardId: 1
-    word: "Montagne"
-    meaning: "Mountain"
-    typeOfWord: "Noun"
-    hit: "Hit"
-    attempts: 1
-    favourite: true
-  - flashcardId: 9
-    word: "Pollution"
-    meaning: "Pollution"
-    typeOfWord: "Noun"
-    hit: "Hit"
-    attempts: 1
-    favourite: true
+    - flashcardId: 0
+      word: "Animaux Sauvages"
+      meaning: "Wild animals "
+      typeOfWord: "Noun"
+      hit: "Hit"
+      attempts: 2
+      favourite: true
+    - flashcardId: 1
+      word: "Océan"
+      meaning: "Ocean"
+      typeOfWord: "Noun"
+      hit: "Hit"
+      attempts: 1
+      favourite: false
+    - flashcardId: 2
+      word: "Forêt"
+      meaning: "Forest"
+      typeOfWord: "Noun"
+      hit: "Hit"
+      attempts: 2
+      favourite: true
+    - flashcardId: 3
+      word: "Coucher de soleil"
+      meaning: "Sunset"
+      typeOfWord: "Noun"
+      hit: "Hit"
+      attempts: 2
+      favourite: true
+    - flashcardId: 4
+      word: "Biodiversité"
+      meaning: "Biodiversity"
+      typeOfWord: "Noun"
+      hit: "Hit"
+      attempts: 1
+      favourite: true
+    - flashcardId: 5
+      word: "Rivière"
+      meaning: "River"
+      typeOfWord: "Noun"
+      hit: "Hit"
+      attempts: 1
+      favourite: true
+    - flashcardId: 6
+      word: "Fleur"
+      meaning: "Flower"
+      typeOfWord: "Noun"
+      hit: "Hit"
+      attempts: 1
+      favourite: true
+    - flashcardId: 7
+      word: "Écologie"
+      meaning: "Ecology"
+      typeOfWord: "Noun"
+      hit: "Hit"
+      attempts: 3
+      favourite: true
+    - flashcardId: 8
+      word: "Étoiles"
+      meaning: "Stars"
+      typeOfWord: "Noun"
+      hit: "Hit"
+      attempts: 1
+      favourite: true
+    - flashcardId: 9
+      word: "Montagne"
+      meaning: "Mountain"
+      typeOfWord: "Noun"
+      hit: "Hit"
+      attempts: 1
+      favourite: true
+    - flashcardId: 10
+      word: "Pollution"
+      meaning: "Pollution"
+      typeOfWord: "Noun"
+      hit: "Hit"
+      attempts: 2
+      favourite: false
