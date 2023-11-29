@@ -1,6 +1,7 @@
 package controllers
 
 import models.Deck
+import models.Flashcard
 import persistence.Serializer
 import utils.Utilities.formatListString
 import java.util.ArrayList
@@ -185,8 +186,11 @@ class DeckAPI(serializerType: Serializer) {
     fun numberOfDecksByThemeNotEmpty(theme: String): Int = decks.count { deck: Deck -> deck.theme == theme && deck.flashcards.isNotEmpty() }
     fun numberOfDecksByLevelNotEmpty(level: String): Int = decks.count { deck: Deck -> deck.level == level && deck.flashcards.isNotEmpty() }
     fun numberOfDecksByLevel(level: String): Int = decks.count { deck: Deck -> deck.level == level }
-
     fun numberOfDecksNeverPlayed(): Int = decks.count { deck: Deck -> deck.flashcards.isNotEmpty() && deck.lastDateAccessed == null }
+    fun calculateOverallNumberOfMisses(): Int = decks.sumOf { deck: Deck -> deck.numberOfMisses() }
+    fun calculateOverallNumberOfHits(): Int = decks.sumOf { deck: Deck -> deck.numberOfHits() }
+    fun calculateOverallNumberOfFlashcards(): Int = decks.sumOf { deck: Deck -> deck.numberOfFlashcards() }
+    fun calculateOverallNumberOfFavourites(): Int = decks.sumOf { deck: Deck -> deck.numberOfFavourites() }
 
     // ----------------------------------------------
     //  SEARCHING METHODS
@@ -195,10 +199,33 @@ class DeckAPI(serializerType: Serializer) {
 
     fun searchDecksByTitle(searchString: String): String {
         val foundDecks = decks.filter { deck -> deck.title.contains(searchString, ignoreCase = true) }
-        if (foundDecks.isNotEmpty()) {
-            return formatListString(foundDecks)
+        return if (foundDecks.isNotEmpty()) {
+            formatListString(foundDecks)
         } else {
-            return "No decks with the title $searchString were found."
+            "No decks with the title $searchString were found."
+        }
+    }
+
+    fun generateSetOfFlashcard(option: String, numberOfFlashcardsChosen: Int): MutableSet<Flashcard>? {
+        val result: MutableSet<Flashcard> = mutableSetOf()
+        var all: MutableSet<Flashcard> = mutableSetOf()
+        var randomIndex: Int
+
+        when (option) {
+            "Miss" -> all = decks.flatMap { deck: Deck -> deck.getMisses() }.toMutableSet()
+            "Hit" -> all = decks.flatMap { deck: Deck -> deck.getHits() }.toMutableSet()
+            "Random" -> all = decks.flatMap { deck: Deck -> deck.flashcards }.toMutableSet()
+            "Favourite" -> all = decks.flatMap { deck: Deck -> deck.getFavourites() }.toMutableSet()
+        }
+
+        if (all.isNotEmpty()) {
+            do {
+                randomIndex = (0 until all.size).random()
+                result.add(all.elementAt(randomIndex))
+            } while (result.distinct().size != numberOfFlashcardsChosen)
+            return result.distinct().toMutableSet()
+        } else {
+            return null
         }
     }
 

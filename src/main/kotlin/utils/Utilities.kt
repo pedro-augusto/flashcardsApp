@@ -21,4 +21,39 @@ object Utilities {
     fun formatSetString(itemsToFormat: Set<Flashcard>): String =
         itemsToFormat
             .joinToString(separator = "\n") { flashcard -> "\t$flashcard" }
+
+    @JvmStatic
+    fun validRange(numberToCheck: Int, min: Int, max: Int): Boolean {
+        return numberToCheck in min..max
+    }
+
+    @JvmStatic
+    fun readValidInput(attribute: String, prompt: String, month: Int? = null): Int {
+        var input = ScannerInput.readNextInt(prompt)
+        var min: Int? = null
+        var max: Int? = null
+
+        when (attribute) {
+            "theme", "type of word" -> { min = 1; max = 5 }
+            "level", "option for generating a deck" -> { min = 1; max = 4 }
+        }
+
+        do {
+            if (validRange(input, min!!, max!!)) {
+                return input
+            } else {
+                println("Invalid $attribute $input.")
+                input = ScannerInput.readNextInt(prompt)
+            }
+        } while (true)
+    }
+
+    fun readValidTitle(): String {
+        var title: String
+        do {
+            title = ScannerInput.readNextLine("Enter a title for the deck: ")
+        } while (title.replace("\\s".toRegex(), "").length >= 2)
+
+        return title
+    }
 }

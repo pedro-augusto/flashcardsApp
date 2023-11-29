@@ -24,13 +24,16 @@ data class Deck(
         return flashcards.add(flashcard)
     }
 
-    fun numberOfFlashcards() = flashcards.size
+    fun numberOfFlashcards(): Int = flashcards.size
 
-    fun numberOfHits() = flashcards.count { flashcard: Flashcard -> flashcard.hit == "Hit" }
+    fun numberOfHits(): Int = flashcards.count { flashcard: Flashcard -> flashcard.hit == "Hit" }
 
-    fun findFlashcard(id: Int): Flashcard? {
-        return flashcards.find { flashcard -> flashcard.flashcardId == id }
-    }
+    fun numberOfMisses(): Int = flashcards.count { flashcard: Flashcard -> flashcard.hit == "Miss" }
+    fun numberOfFavourites(): Int = flashcards.count { flashcard: Flashcard -> flashcard.favourite }
+    fun getHits(): Set<Flashcard> = flashcards.filter { flashcard -> flashcard.hit == "Hit" }.toSet()
+    fun getMisses(): Set<Flashcard> = flashcards.filter { flashcard -> flashcard.hit == "Miss" }.toSet()
+    fun getFavourites(): Set<Flashcard> = flashcards.filter { flashcard -> flashcard.favourite }.toSet()
+    fun findFlashcard(id: Int): Flashcard? = flashcards.find { flashcard -> flashcard.flashcardId == id }
 
     fun deleteFlashcard(id: Int): Boolean {
         return flashcards.removeIf { flashcard -> flashcard.flashcardId == id }
@@ -65,7 +68,7 @@ data class Deck(
     fun calculateHitsPercentage(): Double? {
         return if (numberOfFlashcards() > 0) {
             val hitsNumber = flashcards.filter { flashcard -> flashcard.hit == "Hit" }.size.toDouble()
-            (hitsNumber / flashcards.size.toDouble()) * 100
+            ((hitsNumber / flashcards.size.toDouble()) * 100).toBigDecimal().setScale(2, RoundingMode.HALF_UP).toDouble()
         } else {
             null
         }
