@@ -246,40 +246,6 @@ class DeckAPI(serializerType: Serializer) {
         }*/
 
     // ----------------------------------------------
-    //  LISTING METHODS FOR ITEMS
-    // ----------------------------------------------
-    /*
-        fun listTodoItems(): String =
-             if (numberOfNotes() == 0) "No notes stored"
-             else {
-                 var listOfTodoItems = ""
-                 for (note in notes) {
-                     for (item in note.items) {
-                         if (!item.isItemComplete) {
-                             listOfTodoItems += note.noteTitle + ": " + item.itemContents + "\n"
-                         }
-                     }
-                 }
-                 listOfTodoItems
-             }
-    */
-
-    // ----------------------------------------------
-    //  COUNTING METHODS FOR ITEMS
-    // ----------------------------------------------
-    /*    fun numberOfToDoItems(): Int {
-            var numberOfToDoItems = 0
-            for (note in notes) {
-                for (item in note.items) {
-                    if (!item.isItemComplete) {
-                        numberOfToDoItems++
-                    }
-                }
-            }
-            return numberOfToDoItems
-        }*/
-
-    // ----------------------------------------------
     //  PERSISTENCE
     // ----------------------------------------------
 

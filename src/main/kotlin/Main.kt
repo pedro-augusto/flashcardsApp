@@ -236,105 +236,91 @@ fun chooseLevel(): String {
     }
     return deckLevel
 }
-
-fun listDecks(page: String) = if (deckAPI.numberOfDecks() > 0) {
-    var chosenOption: Int
-    var promptString: String = """
+fun listDecks(page: String): String {
+    if (deckAPI.numberOfDecks() > 0) {
+        var output: String = ""
+        var chosenOption: Int
+        var promptString: String = """
        ----------------------------------------------
        |   LIST DECKS                               
        ----------------------------------------------
     """.trimIndent()
 
-    val listingOptionsEmpty: Set<String> = setOf("All decks", "Empty decks")
-    val listingOptionsNotEmpty = setOf(
-        "Decks with flashcards",
-        "Decks by theme",
-        "Decks by level",
-        "Most recently played decks",
-        "Least recently played decks",
-        "Never played decks",
-        "List decks by number of hits",
-        "List decks by number of misses",
-        "List decks by highest average number of attempts",
-        "List decks by lowest average number of attempts",
-        "List decks by highest number of flashcards marked as favourite"
-    )
+        val listingOptionsEmpty: Set<String> = setOf("All decks", "Empty decks")
+        val listingOptionsNotEmpty = setOf(
+            "Decks with flashcards",
+            "Decks by theme",
+            "Decks by level",
+            "Most recently played decks",
+            "Least recently played decks",
+            "Never played decks",
+            "List decks by number of hits",
+            "List decks by number of misses",
+            "List decks by highest average number of attempts",
+            "List decks by lowest average number of attempts",
+            "List decks by highest number of flashcards marked as favourite"
+        )
 
-    val finalListingOptions: MutableSet<String> = if (page == "excludeEmpty") {
-        listingOptionsNotEmpty as MutableSet<String>
-    } else { // all
-        listingOptionsEmpty.plus(listingOptionsNotEmpty) as MutableSet<String>
-    }
+        val finalListingOptions: MutableSet<String> = if (page == "excludeEmpty") {
+            listingOptionsNotEmpty as MutableSet<String>
+        } else { // all
+            listingOptionsEmpty.plus(listingOptionsNotEmpty) as MutableSet<String>
+        }
 
-    finalListingOptions.forEachIndexed { index, option: String ->
-        promptString += """
+        finalListingOptions.forEachIndexed { index, option: String ->
+            promptString += """
             
             | ${index + 1}. $option
         """.trimIndent()
-    }
+        }
 
-    promptString += """
+        promptString += """
         
         ----------------------------------------------
         ==>> 
     """.trimIndent()
-    do {
-        chosenOption = readNextInt(promptString)
+        do {
+            chosenOption = readNextInt(promptString)
 
-        if (page == "all") {
-            when (chosenOption) {
-                1 -> listAllDecks()
-                2 -> listEmptyDecks()
-                3 -> listDecksWithFlashcards()
-                4 -> listDeckByTheme()
-                5 -> listDeckByLevel()
-                6 -> listMostRecentlyPlayedDecks()
-                7 -> listLeastRecentlyPlayedDecks()
-                8 -> listNeverPlayedDecks()
-                9 -> listDecksByNumberOfHits()
-                10 -> listDecksByNumberOfMisses()
-                11 -> listDecksByHighestAverageAttemptNo()
-                12 -> listDecksByLowestAverageAttemptNo()
-                13 -> listDecksByMostMarkedAsFavourite()
-                else -> println("Invalid option entered: $chosenOption")
+            if (page == "all") {
+                when (chosenOption) {
+                    1 -> output = deckAPI.listAllDecks()
+                    2 -> output= deckAPI.listEmptyDecks()
+                    3 -> output = deckAPI.listDecksWithFlashcards()
+                    4 -> output= deckAPI.listDecksByTheme(chooseTheme())
+                    5 -> output= deckAPI.listDecksByLevel(chooseLevel())
+                    6 -> output= deckAPI.listDecksByMostRecentlyPlayed()
+                    7 -> output= deckAPI.listDecksByLeastRecentlyPlayed()
+                    8 -> output= deckAPI.listNeverPlayedDecks()
+                    9 -> output= deckAPI.listDecksByNumberOfHits()
+                    10 -> output= deckAPI.listDecksByNumberOfMisses()
+                    11 -> output= deckAPI.listDecksByHighestAverageAttemptNo()
+                    12 -> output= deckAPI.listDecksByLowestAverageAttemptNo()
+                    13 -> output= deckAPI.listDecksByMostMarkedAsFavourite()
+                    else -> println("Invalid option entered: $chosenOption")
+                }
+            } else { // excludeEmpty
+                when (chosenOption) {
+                    1 -> output = deckAPI.listDecksWithFlashcards()
+                    2 -> output= deckAPI.listDecksByThemeNotEmpty(chooseTheme())
+                    3 -> output= deckAPI.listDecksByLevelNotEmpty(chooseLevel())
+                    4 -> output= deckAPI.listDecksByMostRecentlyPlayed()
+                    5 -> output= deckAPI.listDecksByLeastRecentlyPlayed()
+                    6 -> output= deckAPI.listNeverPlayedDecks()
+                    7 -> output= deckAPI.listDecksByNumberOfHits()
+                    8 -> output= deckAPI.listDecksByNumberOfMisses()
+                    9 -> output= deckAPI.listDecksByHighestAverageAttemptNo()
+                    10 -> output= deckAPI.listDecksByLowestAverageAttemptNo()
+                    11 -> output= deckAPI.listDecksByMostMarkedAsFavourite()
+                    else -> println("Invalid option entered: $chosenOption")
+                }
             }
-        } else { // excludeEmpty
-            when (chosenOption) {
-                1 -> listDecksWithFlashcards()
-                2 -> listDeckByThemeNotEmpty()
-                3 -> listDeckByLevelNotEmpty()
-                4 -> listMostRecentlyPlayedDecks()
-                5 -> listLeastRecentlyPlayedDecks()
-                6 -> listNeverPlayedDecks()
-                7 -> listDecksByNumberOfHits()
-                8 -> listDecksByNumberOfMisses()
-                9 -> listDecksByHighestAverageAttemptNo()
-                10 -> listDecksByLowestAverageAttemptNo()
-                11 -> listDecksByMostMarkedAsFavourite()
-                else -> println("Invalid option entered: $chosenOption")
-            }
-        }
-    } while (chosenOption !in 1..finalListingOptions.size + 1)
-} else {
-    println("Option Invalid - No decks stored")
+        } while (chosenOption !in 1..finalListingOptions.size + 1)
+        return output
+    } else {
+        return "Option Invalid - No decks stored"
+    }
 }
-
-fun listAllDecks() = println(deckAPI.listAllDecks())
-fun listDecksWithFlashcards() = println(deckAPI.listDecksWithFlashcards())
-fun listEmptyDecks() = println(deckAPI.listEmptyDecks())
-fun listDeckByTheme() = println(deckAPI.listDecksByTheme(chooseTheme()))
-fun listDeckByThemeNotEmpty() = println(deckAPI.listDecksByThemeNotEmpty(chooseTheme()))
-fun listDeckByLevel() = println(deckAPI.listDecksByLevel(chooseLevel()))
-fun listDeckByLevelNotEmpty() = println(deckAPI.listDecksByLevelNotEmpty(chooseLevel()))
-fun listMostRecentlyPlayedDecks() = println(deckAPI.listDecksByMostRecentlyPlayed())
-fun listLeastRecentlyPlayedDecks() = println(deckAPI.listDecksByLeastRecentlyPlayed())
-fun listNeverPlayedDecks() = println(deckAPI.listNeverPlayedDecks())
-fun listDecksByNumberOfHits() = println(deckAPI.listDecksByNumberOfHits())
-fun listDecksByNumberOfMisses() = println(deckAPI.listDecksByNumberOfMisses())
-fun listDecksByHighestAverageAttemptNo() = println(deckAPI.listDecksByHighestAverageAttemptNo())
-fun listDecksByLowestAverageAttemptNo() = println(deckAPI.listDecksByLowestAverageAttemptNo())
-fun listDecksByMostMarkedAsFavourite() = println(deckAPI.listDecksByMostMarkedAsFavourite())
-
 fun generateDeck(option: String): Deck {
     var numberOfFlashcardsChosen: Int
     val finalDeck = Deck(title = "Generated Deck ($option) in ${LocalDate.now().format(DateTimeFormatter.ofPattern("dd/MM/yyyy"))}", theme = "Generated", level = "Generated")
@@ -488,7 +474,12 @@ fun searchDecks() {
 // ------------------------------------
 
 private fun askUserToChooseDeck(page: String): Deck? {
-    listDecks(page)
+    var output = listDecks(page)
+    println(output)
+    if(!output!!.contains("| ID: ")){
+        exitApp()
+    }
+
     if (deckAPI.numberOfDecks() > 0) {
         val deck = deckAPI.findDeck(readNextInt("\nEnter the id of the deck: "))
         if (deck != null) {
