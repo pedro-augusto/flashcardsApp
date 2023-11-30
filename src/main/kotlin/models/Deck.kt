@@ -49,7 +49,7 @@ data class Deck(
      *
      * @return The number of flashcards in the deck.
      */
-    fun numberOfFlashcards(): Int{
+    fun numberOfFlashcards(): Int {
         return flashcards.size
     }
 
