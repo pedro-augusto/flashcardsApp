@@ -264,58 +264,58 @@ class DeckTest {
         @Test
         fun `getHits returns correct flashcards when deck is populated`() {
             assertEquals(2, populatedDeck!!.numberOfHits())
-            assertTrue(utils.Utilities.formatSetString(populatedDeck!!.getHits()).contains("Déception", true))
-            assertTrue(utils.Utilities.formatSetString(populatedDeck!!.getHits()).contains("Honte", true))
-            assertFalse(utils.Utilities.formatSetString(populatedDeck!!.getHits()).contains("Excitation", true))
-            assertFalse(utils.Utilities.formatSetString(populatedDeck!!.getHits()).contains("Enthousiasme", true))
+            assertTrue(utils.Utilities.formatSetString(populatedDeck!!.selectHits()).contains("Déception", true))
+            assertTrue(utils.Utilities.formatSetString(populatedDeck!!.selectHits()).contains("Honte", true))
+            assertFalse(utils.Utilities.formatSetString(populatedDeck!!.selectHits()).contains("Excitation", true))
+            assertFalse(utils.Utilities.formatSetString(populatedDeck!!.selectHits()).contains("Enthousiasme", true))
         }
 
         @Test
         fun `getHits returns empty when deck is empty`() {
             assertEquals(0, emptyDeck!!.numberOfHits())
-            assertFalse(utils.Utilities.formatSetString(emptyDeck!!.getHits()).contains("Excitation", true))
-            assertFalse(utils.Utilities.formatSetString(emptyDeck!!.getHits()).contains("Enthousiasme", true))
-            assertFalse(utils.Utilities.formatSetString(emptyDeck!!.getHits()).contains("Déception", true))
-            assertFalse(utils.Utilities.formatSetString(emptyDeck!!.getHits()).contains("Honte", true))
-            assertTrue(emptyDeck!!.getHits().isEmpty())
+            assertFalse(utils.Utilities.formatSetString(emptyDeck!!.selectHits()).contains("Excitation", true))
+            assertFalse(utils.Utilities.formatSetString(emptyDeck!!.selectHits()).contains("Enthousiasme", true))
+            assertFalse(utils.Utilities.formatSetString(emptyDeck!!.selectHits()).contains("Déception", true))
+            assertFalse(utils.Utilities.formatSetString(emptyDeck!!.selectHits()).contains("Honte", true))
+            assertTrue(emptyDeck!!.selectHits().isEmpty())
         }
 
         @Test
         fun `getMisses returns correct flashcards when deck is populated`() {
             assertEquals(2, populatedDeck!!.numberOfMisses())
-            assertFalse(utils.Utilities.formatSetString(populatedDeck!!.getMisses()).contains("Déception", true))
-            assertFalse(utils.Utilities.formatSetString(populatedDeck!!.getMisses()).contains("Honte", true))
-            assertTrue(utils.Utilities.formatSetString(populatedDeck!!.getMisses()).contains("Excitation", true))
-            assertTrue(utils.Utilities.formatSetString(populatedDeck!!.getMisses()).contains("Enthousiasme", true))
+            assertFalse(utils.Utilities.formatSetString(populatedDeck!!.selectMisses()).contains("Déception", true))
+            assertFalse(utils.Utilities.formatSetString(populatedDeck!!.selectMisses()).contains("Honte", true))
+            assertTrue(utils.Utilities.formatSetString(populatedDeck!!.selectMisses()).contains("Excitation", true))
+            assertTrue(utils.Utilities.formatSetString(populatedDeck!!.selectMisses()).contains("Enthousiasme", true))
         }
 
         @Test
         fun `getMisses returns empty when deck is empty`() {
             assertEquals(0, emptyDeck!!.numberOfMisses())
-            assertFalse(utils.Utilities.formatSetString(emptyDeck!!.getMisses()).contains("Excitation", true))
-            assertFalse(utils.Utilities.formatSetString(emptyDeck!!.getMisses()).contains("Enthousiasme", true))
-            assertFalse(utils.Utilities.formatSetString(emptyDeck!!.getMisses()).contains("Déception", true))
-            assertFalse(utils.Utilities.formatSetString(emptyDeck!!.getMisses()).contains("Honte", true))
-            assertTrue(emptyDeck!!.getMisses().isEmpty())
+            assertFalse(utils.Utilities.formatSetString(emptyDeck!!.selectMisses()).contains("Excitation", true))
+            assertFalse(utils.Utilities.formatSetString(emptyDeck!!.selectMisses()).contains("Enthousiasme", true))
+            assertFalse(utils.Utilities.formatSetString(emptyDeck!!.selectMisses()).contains("Déception", true))
+            assertFalse(utils.Utilities.formatSetString(emptyDeck!!.selectMisses()).contains("Honte", true))
+            assertTrue(emptyDeck!!.selectMisses().isEmpty())
         }
 
         @Test
         fun `getFavourites returns correct flashcards when deck is populated`() {
             assertEquals(2, populatedDeck!!.numberOfFavourites())
-            assertFalse(utils.Utilities.formatSetString(populatedDeck!!.getFavourites()).contains("Déception", true))
-            assertFalse(utils.Utilities.formatSetString(populatedDeck!!.getFavourites()).contains("Honte", true))
-            assertTrue(utils.Utilities.formatSetString(populatedDeck!!.getFavourites()).contains("Excitation", true))
-            assertTrue(utils.Utilities.formatSetString(populatedDeck!!.getFavourites()).contains("Enthousiasme", true))
+            assertFalse(utils.Utilities.formatSetString(populatedDeck!!.selectFavourites()).contains("Déception", true))
+            assertFalse(utils.Utilities.formatSetString(populatedDeck!!.selectFavourites()).contains("Honte", true))
+            assertTrue(utils.Utilities.formatSetString(populatedDeck!!.selectFavourites()).contains("Excitation", true))
+            assertTrue(utils.Utilities.formatSetString(populatedDeck!!.selectFavourites()).contains("Enthousiasme", true))
         }
 
         @Test
         fun `getFavourites returns empty when deck is empty`() {
             assertEquals(0, emptyDeck!!.numberOfFavourites())
-            assertFalse(utils.Utilities.formatSetString(emptyDeck!!.getFavourites()).contains("Excitation", true))
-            assertFalse(utils.Utilities.formatSetString(emptyDeck!!.getFavourites()).contains("Enthousiasme", true))
-            assertFalse(utils.Utilities.formatSetString(emptyDeck!!.getFavourites()).contains("Déception", true))
-            assertFalse(utils.Utilities.formatSetString(emptyDeck!!.getFavourites()).contains("Honte", true))
-            assertTrue(emptyDeck!!.getFavourites().isEmpty())
+            assertFalse(utils.Utilities.formatSetString(emptyDeck!!.selectFavourites()).contains("Excitation", true))
+            assertFalse(utils.Utilities.formatSetString(emptyDeck!!.selectFavourites()).contains("Enthousiasme", true))
+            assertFalse(utils.Utilities.formatSetString(emptyDeck!!.selectFavourites()).contains("Déception", true))
+            assertFalse(utils.Utilities.formatSetString(emptyDeck!!.selectFavourites()).contains("Honte", true))
+            assertTrue(emptyDeck!!.selectFavourites().isEmpty())
         }
     }
 }

@@ -49,7 +49,9 @@ data class Deck(
      *
      * @return The number of flashcards in the deck.
      */
-    fun numberOfFlashcards(): Int = flashcards.size
+    fun numberOfFlashcards(): Int{
+        return flashcards.size
+    }
 
     /**
      * Returns the number of flashcards marked as "Hit" in the deck.
@@ -58,7 +60,9 @@ data class Deck(
      *
      * @return The number of flashcards marked as "Hit" in the deck.
      */
-    fun numberOfHits(): Int = flashcards.count { flashcard: Flashcard -> flashcard.hit == "Hit" }
+    fun numberOfHits(): Int {
+        return flashcards.count { flashcard: Flashcard -> flashcard.hit == "Hit" }
+    }
 
     /**
      * Returns the number of flashcards marked as "Miss" in the deck.
@@ -67,7 +71,9 @@ data class Deck(
      *
      * @return The number of flashcards marked as "Miss" in the deck.
      */
-    fun numberOfMisses(): Int = flashcards.count { flashcard: Flashcard -> flashcard.hit == "Miss" }
+    fun numberOfMisses(): Int {
+        return flashcards.count { flashcard: Flashcard -> flashcard.hit == "Miss" }
+    }
 
     /**
      * Returns the number of flashcards marked as favourites in the deck.
@@ -76,7 +82,9 @@ data class Deck(
      *
      * @return The number of flashcards marked as favourites in the deck.
      */
-    fun numberOfFavourites(): Int = flashcards.count { flashcard: Flashcard -> flashcard.favourite }
+    fun numberOfFavourites(): Int {
+        return flashcards.count { flashcard: Flashcard -> flashcard.favourite }
+    }
 
     /**
      * Returns a set of flashcards marked as "Hit" in the deck.
@@ -85,7 +93,9 @@ data class Deck(
      *
      * @return A set of flashcards marked as "Hit" in the deck.
      */
-    fun getHits(): Set<Flashcard> = flashcards.filter { flashcard -> flashcard.hit == "Hit" }.toSet()
+    fun selectHits(): Set<Flashcard> {
+        return flashcards.filter { flashcard -> flashcard.hit == "Hit" }.toSet()
+    }
 
     /**
      * Returns a set of flashcards marked as "Miss" in the deck.
@@ -94,7 +104,9 @@ data class Deck(
      *
      * @return A set of flashcards marked as "Miss" in the deck.
      */
-    fun getMisses(): Set<Flashcard> = flashcards.filter { flashcard -> flashcard.hit == "Miss" }.toSet()
+    fun selectMisses(): Set<Flashcard> {
+        return flashcards.filter { flashcard -> flashcard.hit == "Miss" }.toSet()
+    }
 
     /**
      * Returns a set of flashcards marked as favourites in the deck.
@@ -103,7 +115,9 @@ data class Deck(
      *
      * @return A set of flashcards marked as favourites in the deck.
      */
-    fun getFavourites(): Set<Flashcard> = flashcards.filter { flashcard -> flashcard.favourite }.toSet()
+    fun selectFavourites(): Set<Flashcard> {
+        return flashcards.filter { flashcard -> flashcard.favourite }.toSet()
+    }
 
     /**
      * Finds a flashcard in the deck based on its unique identifier.
