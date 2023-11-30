@@ -1,6 +1,7 @@
 import controllers.DeckAPI
 import models.Deck
 import models.Flashcard
+import mu.KotlinLogging
 import persistence.YAMLSerializer
 import utils.ScannerInput.readNextInt
 import utils.ScannerInput.readNextLine
@@ -17,6 +18,7 @@ import java.util.concurrent.TimeUnit
 import kotlin.random.Random
 import kotlin.system.exitProcess
 private val deckAPI = DeckAPI(YAMLSerializer(File("decks.yaml")))
+public val logger = KotlinLogging.logger { }
 
 /**
  * The entry point of the program.
@@ -24,11 +26,15 @@ private val deckAPI = DeckAPI(YAMLSerializer(File("decks.yaml")))
  *
  * @see runMenu
  */
-fun main() = runMenu()
+fun main() {
+    logger.info { "Application started" }
+    runMenu()
+}
 
 /**
  * Executes the main menu loop, allowing users to interact with various features of the flashcard application.
  * The menu options include:
+ *
  *
  * 1. Add a new deck
  * 2. List all decks
@@ -47,23 +53,22 @@ fun main() = runMenu()
  * Invalid menu choices result in an error message being printed.
  */
 fun runMenu() {
-    do {
-        when (val option = mainMenu()) {
-            1 -> addDeck()
-            2 -> println(listDecks("all"))
-            3 -> updateDeck()
-            4 -> deleteDeck()
-            5 -> searchDecks()
-            6 -> addFlashcardToDeck()
-            7 -> updateFlashcardsInDeck()
-            8 -> deleteFlashcard()
-            9 -> play()
-            10 -> save()
-            11 -> load()
-            0 -> exitApp()
-            else -> println("Invalid menu choice: $option")
-        }
-    } while (true)
+    do when (val option = mainMenu()) {
+        1 -> addDeck()
+        2 -> println(listDecks("all"))
+        3 -> updateDeck()
+        4 -> deleteDeck()
+        5 -> searchDecks()
+        6 -> addFlashcardToDeck()
+        7 -> updateFlashcardsInDeck()
+        8 -> deleteFlashcard()
+        9 -> play()
+        10 -> save()
+        11 -> load()
+        0 -> exitApp()
+        else -> println("Invalid menu choice: $option")
+    }
+    while (true)
 }
 
 /**
@@ -140,7 +145,7 @@ fun mainMenu() = readNextInt(
  * 5. Each flashcard is presented, and the user is given time to think.
  * 6. User indicates if they guessed the flashcard correctly.
  * 7. Flashcards are marked with hit/miss and the percentage of hits is displayed.
- * 8. Optionally, the user can mark flashcards as favorites.
+ * 8. A function to ask the user whether they want to mark a flashcard as favourite or not is invoked.
  * 9. If a deck is generated, the user can choose to save it.
  *
  * @see readNextInt
@@ -154,6 +159,7 @@ fun mainMenu() = readNextInt(
  * @see TimeUnit.SECONDS.sleep
  */
 fun play() {
+    logger.info { "Play function invoked" }
     var guessedCorrectly: Int
     var chosenDeck: Deck?
     val addGeneratedDeck: Int
@@ -171,6 +177,8 @@ fun play() {
                 return
             }
         }
+
+        logger.info { "Chosen deck: $chosenDeck" }
 
         println("")
         println("Instructions: Either the WORD side of the card will be shown and you have to try to remember its meaning or the MEANING side of the word will be shown and you have to remember the respective WORD.")
@@ -190,7 +198,7 @@ fun play() {
                 printFlashcardPlayMode("word", flashcard, true)
             }
 
-            guessedCorrectly = readNextInt("Did you guess it correctly? (1- YES, Any Other Number- NO): ")
+            guessedCorrectly = readNextInt("Did you guess it correctly? (1- YES | ANY OTHER NUMBER- NO): ")
             if (guessedCorrectly == 1) {
                 flashcard.hit = "Hit"
             } else {
@@ -203,36 +211,49 @@ fun play() {
 
         println("")
         println("Your percentage of hits is: $greenColour ${chosenDeck.calculateHitsPercentage()}% $resetColour")
+        logger.info { "Play function completed. Percentage of hits: ${chosenDeck.calculateHitsPercentage()}%" }
 
-        val markAsFavourite =
-            readNextInt("Would you like to mark one or more words as favourite? (1- YES | Any Other Number- NO): ")
-
-        if (markAsFavourite == 1) {
-            var continueMarking: Int
-            var favouriteId: Int
-
-            do {
-                favouriteId = readNextInt("Enter the id of the flashcard you want to mark as favourite: ")
-                if (chosenDeck.findFlashcard(favouriteId) != null && !chosenDeck.findFlashcard(favouriteId)!!.favourite) {
-                    chosenDeck.findFlashcard(favouriteId)!!.favourite = true
-                    println("Flashcard successfully marked as favourite.")
-                } else {
-                    println("This flashcard is either already marked as favourite or it doesn't exist in this deck.")
-                }
-
-                continueMarking =
-                    readNextInt("Would you like to continue marking flashcards as favourites? (1- YES | Any Other Number- NO): ")
-            } while (continueMarking == 1)
-        }
+        promptMarkFlashcardAsFavourite(chosenDeck)
 
         if (questionGenerate == 2) {
             addGeneratedDeck = readNextInt("Would you like to save this generated deck? (1- YES | ANY OTHER NUMBER- 2): ")
             if (addGeneratedDeck == 1) {
                 deckAPI.addDeck(chosenDeck)
+                logger.info { "Generated deck saved" }
             }
         }
     } else {
+        logger.info { "Play function not concluded - user tried to play with no valid decks in the system" }
         println("There are no decks with flashcards in the system yet. Create decks or populate an existing empty one with flashcards to start playing.")
+    }
+}
+
+/**
+ * Prompts the user to mark one or more flashcards as favorites within the given deck.
+ *
+ * @param chosenDeck The deck in which the user can mark flashcards as favorites.
+ */
+fun promptMarkFlashcardAsFavourite(chosenDeck: Deck) {
+    val markAsFavourite =
+        readNextInt("Would you like to mark one or more words as favourite? (1- YES | Any Other Number- NO): ")
+
+    if (markAsFavourite == 1) {
+        var continueMarking: Int
+        var favouriteId: Int
+
+        do {
+            favouriteId = readNextInt("Enter the id of the flashcard you want to mark as favourite: ")
+            if (chosenDeck.findFlashcard(favouriteId) != null && !chosenDeck.findFlashcard(favouriteId)!!.favourite) {
+                chosenDeck.findFlashcard(favouriteId)!!.favourite = true
+                println("Flashcard successfully marked as favourite.")
+                logger.info { "Flashcard $favouriteId in deck ${chosenDeck.deckId} marked as favourite" }
+            } else {
+                println("This flashcard is either already marked as favourite or it doesn't exist in this deck.")
+            }
+
+            continueMarking =
+                readNextInt("Would you like to continue marking flashcards as favourites? (1- YES | Any Other Number- NO): ")
+        } while (continueMarking == 1)
     }
 }
 
@@ -298,6 +319,7 @@ fun printFlashcardPlayMode(guess: String, flashcard: Flashcard, result: Boolean)
  * @see deckAPI.addDeck
  */
 fun addDeck() {
+    logger.info { "Add deck function invoked" }
     val deckTitle = readValidString("Title")
     val deckTheme = askUserToChooseTheme()
     val deckLevel = askUserToChooseLevel()
@@ -306,8 +328,10 @@ fun addDeck() {
 
     if (isAdded) {
         println("Added Successfully")
+        logger.info { "Deck successfully added" }
     } else {
-        println("Add Failed")
+        println("Add Operation Failed")
+        logger.info { "Add Operation Failed" }
     }
 }
 
@@ -447,6 +471,7 @@ fun listDecks(page: String): String {
  * @see Deck
  */
 fun generateDeck(option: String): Deck {
+    logger.info { "Generate deck function invoked" }
     var numberOfFlashcardsChosen: Int
     val finalDeck = Deck(title = "Generated Deck ($option) in ${LocalDate.now().format(DateTimeFormatter.ofPattern("dd/MM/yyyy"))}", theme = "Generated", level = "Generated")
 
@@ -488,6 +513,7 @@ fun generateDeck(option: String): Deck {
  * @see Deck
  */
 fun updateDeck() {
+    logger.info { "Update deck function invoked" }
     if (deckAPI.numberOfDecks() > 0) {
         val deckToUpdate = askUserToChooseDeck("all")
         val deckTitle = readValidString("title")
@@ -497,11 +523,14 @@ fun updateDeck() {
         // pass the index of the note and the new note details to NoteAPI for updating and check for success.
         if (deckAPI.updateDeck(deckToUpdate!!.deckId, Deck(deckId = 0, title = deckTitle, theme = deckTheme, level = deckLevel))) {
             println("Update Successful")
+            logger.info { "Update Successful" }
         } else {
             println("Update Failed")
+            logger.info { "Update Failed" }
         }
     } else {
         println("There are no decks for this id number")
+        logger.info { "User tried to update an invalid deck" }
     }
 }
 
@@ -514,13 +543,16 @@ fun updateDeck() {
  * @see deckAPI.deleteDeck
  */
 fun deleteDeck() {
+    logger.info { "Delete deck function invoked" }
     if (deckAPI.numberOfDecks() > 0) {
         val deckToDelete = askUserToChooseDeck("all")
         val deleteDeck = deckAPI.deleteDeck(deckToDelete!!.deckId)
         if (deleteDeck) {
             println("Delete Successful!")
+            logger.info { "Delete deck successful: $deckToDelete" }
         } else {
             println("Delete NOT Successful")
+            logger.info { "Delete deck not successful" }
         }
     }
 }
@@ -534,11 +566,14 @@ fun deleteDeck() {
  * @see deckAPI.searchDecksByTitle
  */
 fun searchDecks() {
+    logger.info { "Search deck function invoked" }
     val searchTitle = readNextLine("Enter a title to be searched: ")
     val searchResults = deckAPI.searchDecksByTitle(searchTitle)
     if (searchResults.isEmpty()) {
+        logger.info { "No decks with title $searchTitle found" }
         println("No decks found")
     } else {
+        logger.info { "Deck(s) with title $searchTitle found" }
         println(searchResults)
     }
 }
@@ -560,6 +595,7 @@ fun searchDecks() {
  * @see Flashcard
  */
 fun createFlashcard(): Flashcard {
+    logger.info { "Create flashcard function invoked" }
     val word = readValidString("word")
     val meaning = readValidString("meaning")
     val typeNo = readValidInput("type of word", "Enter the word type (1-Noun, 2-Verb, 3-Adjective, 4-Adverb, 5-Expression): ")
@@ -586,14 +622,17 @@ fun createFlashcard(): Flashcard {
  * @see Deck.addFlashcard
  */
 private fun addFlashcardToDeck() {
+    logger.info { "Add flashcard to deck function invoked" }
     val deck: Deck? = askUserToChooseDeck("all")
     var continueAdding: Int
     if (deck != null) {
         do {
             if (deck.addFlashcard(createFlashcard())) {
                 println("Added Successfully!")
+                logger.info { "Flashcard added to deck ${deck.deckId}" }
             } else {
                 println("Add operation NOT Successful")
+                logger.info { "Add flashcard to deck failed" }
             }
             continueAdding = readNextInt("Would you like to continue adding flashcards to this deck? (1-YES | ANY OTHER NUMBER-NO): ")
         } while (continueAdding == 1)
@@ -611,14 +650,17 @@ private fun addFlashcardToDeck() {
  * @see Deck.updateFlashcard
  */
 fun updateFlashcardsInDeck() {
+    logger.info { "Update flashcards in deck function invoked" }
     val deck: Deck? = askUserToChooseDeck("excludeEmpty")
     if (deck != null && deck.flashcards.isNotEmpty()) {
         val flashcard: Flashcard? = askUserToChooseFlashcard(deck)
         if (flashcard != null) {
             if (deck.updateFlashcard(flashcard.flashcardId, createFlashcard())) {
                 println("Flashcard updated")
+                logger.info { "Flashcard ${flashcard.flashcardId} in deck ${deck.deckId} updated" }
             } else {
                 println("Flashcard NOT updated")
+                logger.info { "Flashcard not updated" }
             }
         }
     }
@@ -634,6 +676,7 @@ fun updateFlashcardsInDeck() {
  * @see Deck.deleteFlashcard
  */
 fun deleteFlashcard() {
+    logger.info { "Delete flashcard function invoked" }
     val deck: Deck? = askUserToChooseDeck("excludeEmpty")
     if (deck != null) {
         val flashcard: Flashcard? = askUserToChooseFlashcard(deck)
@@ -641,8 +684,10 @@ fun deleteFlashcard() {
             val isDeleted = deck.deleteFlashcard(flashcard.flashcardId)
             if (isDeleted) {
                 println("Deleted Successfully!")
+                logger.info { "Flashcard ${flashcard.flashcardId} in deck ${deck.deckId} deleted" }
             } else {
                 println("Delete operation NOT Successful")
+                logger.info { "Delete flashcard operation NOT Successful" }
             }
         }
     }
@@ -666,6 +711,7 @@ fun deleteFlashcard() {
  * @see DeckAPI.findDeck
  */
 private fun askUserToChooseDeck(page: String): Deck? {
+    logger.info { "User prompted to choose a deck" }
     var output: String
     do {
         output = listDecks(page)
@@ -694,6 +740,7 @@ private fun askUserToChooseDeck(page: String): Deck? {
  * @see readValidInput
  */
 private fun askUserToChooseGenerateOption(): String {
+    logger.info { "User prompted to choose an option to generate a deck" }
     val chosenOption = readValidInput("option for generating a deck", "Play generated deck with (1-Flashcards that were 'Miss' | 2-Flashcards that were 'Hit' | 3-Favourite Flashcards | 4-Random Flashcards): ")
     var option = ""
     when (chosenOption) {
@@ -720,6 +767,7 @@ private fun askUserToChooseGenerateOption(): String {
  * @see Deck.findFlashcard
  */
 private fun askUserToChooseFlashcard(deck: Deck): Flashcard? {
+    logger.info { "User prompted to choose a flashcard" }
     return if (deck.numberOfFlashcards() > 0) {
         print(deck.listFlashcards())
         deck.findFlashcard(readNextInt("\nEnter the id of the flashcard: "))
@@ -740,6 +788,7 @@ private fun askUserToChooseFlashcard(deck: Deck): Flashcard? {
  * @see readValidInput
  */
 fun askUserToChooseTheme(): String {
+    logger.info { "User prompted to choose a theme" }
     val chosenTheme = readValidInput("theme", "Enter a theme (1-Everyday, 2-Academic, 3-Professional, 4- Cultural and Idiomatic, 5-Emotions and Feelings): ")
     var deckTheme = ""
     when (chosenTheme) {
@@ -762,7 +811,8 @@ fun askUserToChooseTheme(): String {
  *
  * @see readValidInput
  */
-fun askUserToChooseLevel(): String { // TODO: CHECK
+fun askUserToChooseLevel(): String {
+    logger.info { "User prompted to choose a level" }
     val chosenLevel = readValidInput("level", "Enter a level (1-Beginner, 2-Intermediate, 3-Advanced, 4- Proficient): ")
     var deckLevel = ""
     when (chosenLevel) {
@@ -790,8 +840,10 @@ fun save() {
     try {
         deckAPI.store()
         println("Data successfully saved")
+        logger.info { "Data saved to the system" }
     } catch (e: Exception) {
         System.err.println("Error writing to file: $e")
+        logger.info { "Error in saving data to the system" }
     }
 }
 
@@ -807,8 +859,10 @@ fun load() {
     try {
         deckAPI.load()
         println("Data successfully loaded")
+        logger.info { "Data loaded into the system" }
     } catch (e: Exception) {
         System.err.println("Error reading from file: $e")
+        logger.info { "Error in loading data to the system" }
     }
 }
 
@@ -824,6 +878,7 @@ fun load() {
  * @see exitProcess
  */
 fun exitApp() {
+    logger.info { "Exiting application" }
     println("Exiting...bye")
     exitProcess(0)
 }

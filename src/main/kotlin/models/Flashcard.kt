@@ -33,7 +33,7 @@ data class Flashcard(
             ""
         }
 
-        return """                    ${Utilities.blueColour}--------------------------------------------------------------------------
+        return """                    ${Utilities.blueColour}--------------------------------------------------------------------------------------------
                         | ID: $flashcardId  | WORD: $word  | MEANING: $meaning  | TYPE: $typeOfWord 
                         | ${hit.uppercase()} $attemptsString$favouriteString
                         --------------------------------------------------------------------------------------------${Utilities.resetColour}
