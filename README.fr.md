@@ -8,7 +8,7 @@ Ce projet est une application flashcard pour aider les étudiants à mémoriser 
 
 Cette application est composée de deux modèles : deck et flashcards. Un deck peut être vide (sans flashcards) ou contenir plusieurs flashcards. Les fonctionnalités sont les suivantes :
 
-1.  CRUD operations for decks
+1.  Opérations CRUD pour les decks
 2.  Opérations CRUD pour les flashcards
 3.  Rechercher un deck par titre
 4.  Jouer : cette fonction invite l'utilisateur à choisir un jeu, affiche la signification des cartes mémoire ou les mots pendant une durée spécifiée, puis affiche la réponse. Une fois que toutes les cartes mémoire ont été lues, le pourcentage de hits est affiché et les utilisateurs ont la possibilité de marquer n'importe quelle carte mémoire comme favorite. La dernière date d'accès au deck est automatiquement mise à jour. Aucun deck vide ne peut être joué.
@@ -16,7 +16,7 @@ Cette application est composée de deux modèles : deck et flashcards. Un deck 
 
 -   Tous les decks
 -   Ponts vides
--   Decks with flashcards
+-   Decks avec flashcards
 -   Decks par thème (2 fonctions : une à utiliser lorsque l'utilisateur doit sélectionner un deck à jouer répertoriant uniquement les decks remplis et une autre fonction listant également les decks vides)
 -   Decks par niveau (2 fonctions : une à utiliser lorsque l'utilisateur doit sélectionner un deck pour jouer en répertoriant uniquement les decks remplis et une autre fonction listant également les decks vides)
 -   Decks joués le plus récemment
@@ -26,7 +26,7 @@ Cette application est composée de deux modèles : deck et flashcards. Un deck 
 -   Lister les decks par nombre d'échecs
 -   Répertorier les decks par nombre moyen de tentatives le plus élevé
 -   Répertorier les decks par nombre moyen de tentatives le plus bas
--   List decks by highest number of flashcards marked as favourite
+-   Répertorier les decks par le plus grand nombre de flashcards marquées comme favorites
 
 Des tests unitaires ont été effectués pour garantir une bonne couverture des tests.
 
@@ -36,7 +36,7 @@ La persistance a été introduite dans le projet, permettant le stockage et la r
 
 ### Actions GitHub
 
-This repository has 2 extra actions in addition to the ones worked on in labs during class: one that automatically translates the readme.md to French and another one that automatically creates an SVG diagram of the repository. The automatically generated archives related to the actions described are respectively named README.fr.md and flashcard-app-diagram.svg
+Ce référentiel comporte 2 actions supplémentaires en plus de celles travaillées dans les laboratoires pendant les cours : une qui traduit automatiquement le fichier readme.md en français et une autre qui crée automatiquement un diagramme SVG du référentiel. Les archives générées automatiquement liées aux actions décrites sont respectivement nommées README.fr.md et flashcard-app-diagram.svg
 
 ## Auteurs du projet
 
@@ -44,5 +44,4 @@ Projet développé par Pedro Augusto pour le module Outils de développement log
 
 ## Références supplémentaires
 
-<https://stackoverflow.com/questions/70538793/remote-write-access-to-repository-not-granted-fatal-unable-to-access><https://stackoverflow.com/questions/58282791/why-when-i-use-github-actions-ci-for-a-gradle-project-i-face-gradlew-permiss>[https://www.tutorialspoint.com/java/math/java_math_enumerations.htm#:~:text=The%20 java.,result%20is%20to%20be%20 calculated](https://www.tutorialspoint.com/java/math/java_math_enumerations.htm#:~:text=The%20java.,result%20is%20to%20be%20calculated).
-<https://www.baeldung.com/kotlin/round-numbers><https://stackoverflow.com/questions/66368396/kotlin-collections-and-objects-sum><https://stackoverflow.com/questions/75002278/how-to-sort-data-class-object-in-array-with-localdate-now-in-kotlin><https://developermemos.com/posts/random-boolean-kotlin>
+<https://stackoverflow.com/questions/70538793/remote-write-access-to-repository-not-granted-fatal-unable-to-access><https://stackoverflow.com/questions/58282791/why-when-i-use-github-actions-ci-for-a-gradle-project-i-face-gradlew-permiss>[https://www.tutorialspoint.com/java/math/java_math_enumerations.htm#:~:text=The%20 java.,result%20is%20to%20be%20 calculated](https://www.tutorialspoint.com/java/math/java_math_enumerations.htm#:~:text=The%20java.,result%20is%20to%20be%20calculated).<https://www.baeldung.com/kotlin/round-numbers><https://stackoverflow.com/questions/66368396/kotlin-collections-and-objects-sum><https://stackoverflow.com/questions/75002278/how-to-sort-data-class-object-in-array-with-localdate-now-in-kotlin><https://developermemos.com/posts/random-boolean-kotlin>
