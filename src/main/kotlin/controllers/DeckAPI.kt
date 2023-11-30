@@ -22,7 +22,7 @@ class DeckAPI(serializerType: Serializer) {
     // ----------------------------------------------
     //  For Managing the id internally in the program
     // ----------------------------------------------
-    private var lastId = 0
+    private var lastId = decks.size
 
     /**
      * Generates and returns a unique identifier for a deck.
@@ -462,10 +462,10 @@ class DeckAPI(serializerType: Serializer) {
         var randomIndex: Int
 
         when (option) {
-            "Miss" -> all = decks.flatMap { deck: Deck -> deck.getMisses() }.toMutableSet()
-            "Hit" -> all = decks.flatMap { deck: Deck -> deck.getHits() }.toMutableSet()
+            "Miss" -> all = decks.flatMap { deck: Deck -> deck.selectMisses() }.toMutableSet()
+            "Hit" -> all = decks.flatMap { deck: Deck -> deck.selectHits() }.toMutableSet()
             "Random" -> all = decks.flatMap { deck: Deck -> deck.flashcards }.toMutableSet()
-            "Favourite" -> all = decks.flatMap { deck: Deck -> deck.getFavourites() }.toMutableSet()
+            "Favourite" -> all = decks.flatMap { deck: Deck -> deck.selectFavourites() }.toMutableSet()
         }
 
         if (all.isNotEmpty()) {
@@ -488,6 +488,7 @@ class DeckAPI(serializerType: Serializer) {
      */
     fun load() {
         decks = serializer.read() as ArrayList<Deck>
+        lastId = decks.size
     }
 
     /**
