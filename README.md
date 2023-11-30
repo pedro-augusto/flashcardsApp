@@ -28,7 +28,7 @@ This application is comprised of two models: deck and flashcards. A deck can be 
 - List decks by lowest average number of attempts
 - List decks by highest number of flashcards marked as favourite
 
-6. Generate Deck: Generates a new deck based with the user's desired number of flashcards. The user is prompted to choose one of the options for generating a deck: deck with flashcards that were 'Miss', deck with flashcards that were 'Hit', deck with favourite flashcards or deck withrandom Flashcards. After playing with a generated deck, user is prompted if they would like to save the deck into the system.
+6. Generate Deck: Generates a new deck based with the user's desired number of flashcards. The user is prompted to choose one of the options for generating a deck: deck with flashcards that were 'Miss', deck with flashcards that were 'Hit', deck with favourite flashcards or deck with random Flashcards. After playing with a generated deck, user is prompted if they would like to save the deck into the system.
 
 
 ### Tests
