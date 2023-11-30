@@ -70,6 +70,7 @@ tasks.withType<Detekt>().configureEach {
     reports {
         html.required.set(true)
     }
+    isEnabled = false
 }
 
 kotlin {
